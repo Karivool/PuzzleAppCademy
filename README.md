@@ -33,33 +33,35 @@ Currently, this game should not require any backend. Once it grows in complexity
 
 ### Implementation Timeline
 
-## Day 1: 
-* [ ] The board must render with different color orbs. 
-  * [ ] Create an empty board.
-  * [ ] Create individual color orbs.
-  * [ ] Start the game off with a populated board.
-  * [ ] Create nice CSS.
-## Day 2:
-* [ ] Picking up an orb and moving it should switch places with the nearest orb to it.
-  * [ ] Pick up an orb with the mouse.
-  * [ ] Let go of an orb with the mouse.
-  * [ ] Move an orb to switch places with another orb.
-  * [ ] Create nice CSS.
-## Day 3:
-* [ ] Orbs with matching colors should be destroyed, then skyfalls of new orbs should be made.
-  * [ ] Orbs should destroy once the user lets go of the mouse.
-  * [ ] An orb must have switched places for destruction to happen.
-  * [ ] Orb destruction order needs to be decided.
-  * [ ] Only possible matches should destroy.
-  * [ ] Once all possible matches are destroyed, new orbs should fall.
-  * [ ] If any new combos are made from this, they should be matched too.
-  * [ ] Create nice CSS.
+### Day 1: 
+- [ ] The board must render with different color orbs. 
+  - [ ] Create an empty board.
+  - [ ] Create individual color orbs.
+  - [ ] Start the game off with a populated board.
+  - [ ] Create nice CSS.
 
-## BONUS FEATURES:
-* [ ] Time limit to move orbs should be implemented.
-  * [ ] Time limit begins once an orb has been switched.
-  * [ ] Once the time limit is up, the player's turn is over
-* [ ] ...and beyond.
+### Day 2:
+- [ ] Picking up an orb and moving it should switch places with the nearest orb to it.
+  - [ ] Pick up an orb with the mouse.
+  - [ ] Let go of an orb with the mouse.
+  - [ ] Move an orb to switch places with another orb.
+  - [ ] Create nice CSS.
+
+### Day 3:
+- [ ] Orbs with matching colors should be destroyed, then skyfalls of new orbs should be made.
+  - [ ] Orbs should destroy once the user lets go of the mouse.
+  - [ ] An orb must have switched places for destruction to happen.
+  - [ ] Orb destruction order needs to be decided.
+  - [ ] Only possible matches should destroy.
+  - [ ] Once all possible matches are destroyed, new orbs should fall.
+  - [ ] If any new combos are made from this, they should be matched too.
+  - [ ] Create nice CSS.
+
+### BONUS FEATURES:
+- [ ] Time limit to move orbs should be implemented.
+  - [ ] Time limit begins once an orb has been switched.
+  - [ ] Once the time limit is up, the player's turn is over
+- [ ] ...and beyond.
 
 ## Checklist
 
