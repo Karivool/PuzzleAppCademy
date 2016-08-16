@@ -24,8 +24,7 @@ A simple clone of the puzzle board for Puzzle and Dragons
 
 ### Wireframes
 
-This will be a lot less involved than for your Full Stack Project, but make sure you have drawings
-for each view, including modals.
+![wireframe-img]
 
 ### Backend
 
@@ -83,3 +82,5 @@ Currently, this game should not require any backend. Once it grows in complexity
 * [ ] To-dos/future features.
 * [ ] No .DS_Stores / debuggers / console.logs.
 * [ ] Organize into /assets and /lib.
+
+[wireframe-img]: ./2016-08-15 20.17.26.jpg
