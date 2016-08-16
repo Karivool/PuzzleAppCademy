@@ -24,6 +24,7 @@ A simple clone of the puzzle board for Puzzle and Dragons
 
 ### Wireframes
 
+![wireframe-img]
 (https://github.com/Karivool/puzzleappacademy/blob/master/2016-08-15%2020.17.26.jpg?raw=true)
 
 ### Backend
