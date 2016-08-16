@@ -24,7 +24,7 @@ A simple clone of the puzzle board for Puzzle and Dragons
 
 ### Wireframes
 
-![wireframe-img]
+(https://github.com/Karivool/puzzleappacademy/blob/master/2016-08-15%2020.17.26.jpg?raw=true)
 
 ### Backend
 
@@ -83,4 +83,3 @@ Currently, this game should not require any backend. Once it grows in complexity
 * [ ] No .DS_Stores / debuggers / console.logs.
 * [ ] Organize into /assets and /lib.
 
-[wireframe-img]: ./2016-08-15 20.17.26.jpg
