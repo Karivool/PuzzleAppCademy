@@ -1,0 +1,33 @@
+{
+  "name": "PuzzleAppCademy",
+  "version": "1.0.0",
+  "description": "Puzzle and Dragons clone",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs",
+    "test": "test"
+  },
+  "engines": {
+    "node": "6.3.1",
+    "npm": "3.10.3"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "./node_modules/.bin/webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Karivool/PuzzleAppCademy.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Karivool/PuzzleAppCademy.git"
+  },
+  "homepage": "https://github.com/Karivool/PuzzleAppCademy#readme",
+  "dependencies": {
+    "jquery": "^3.1.0",
+    "webpack": "^1.13.1"
+  }
+}
