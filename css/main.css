@@ -1,0 +1,110 @@
+html, body, header, nav, h1, a, ul, li,
+strong, main, section, img, div, h2, p,
+form, fieldset, label, input, textarea,
+button, article, footer, small {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  font: inherit;
+  box-sizing: inherit;
+  text-align: inherit;
+  text-decoration: inherit;
+  vertical-align: inherit;
+  color: inherit;
+  background: transparent;
+  list-style: none;
+}
+
+#pac {
+  width: 504px;
+  margin: 0 auto;
+  background: none;
+}
+
+li {
+  float: left;
+}
+
+.orb-class {
+  height: 80px;
+  width: 80px;
+  border-radius: 50px;
+  margin: 2px;
+}
+
+.orb-fire {
+  height: 80px;
+  width: 80px;
+  background-color: firebrick;
+  border-radius: 50px;
+  box-shadow: 0px 0px 5px red;
+  margin: 2px;
+}
+
+.orb-water {
+  height: 80px;
+  width: 80px;
+  background-color: cornflowerblue;
+  border-radius: 50px;
+  box-shadow: 0px 0px 5px blue;
+  margin: 2px;
+}
+
+.orb-wood {
+  height: 80px;
+  width: 80px;
+  background-color: yellowgreen;
+  border-radius: 50px;
+  box-shadow: 0px 0px 5px green;
+  margin: 2px;
+}
+
+.orb-light {
+  height: 80px;
+  width: 80px;
+  background-color: gold;
+  border-radius: 50px;
+  box-shadow: 0px 0px 5px gold;
+  margin: 2px;
+}
+
+.orb-dark {
+  height: 80px;
+  width: 80px;
+  background-color: blueviolet;
+  border-radius: 50px;
+  box-shadow: 0px 0px 5px purple;
+  margin: 2px;
+}
+
+.orb-heart {
+  height: 80px;
+  width: 80px;
+  background-color: hotpink;
+  border-radius: 0px;
+  box-shadow: 0px 0px 5px pink;
+  margin: 2px;
+}
+
+.orb-poison {
+  height: 80px;
+  width: 80px;
+  background-color: slateblue;
+  border-radius: inherit;
+  margin: 2px;
+}
+
+.orb-jammer {
+  height: 80px;
+  width: 80px;
+  background-color: dimgrey;
+  border-radius: inherit;
+  margin: 2px;
+}
+
+.group:after {
+  content: "";
+  clear: both;
+  display: block;
+}
