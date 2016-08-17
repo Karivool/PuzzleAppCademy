@@ -16,10 +16,18 @@ button, article, footer, small {
   list-style: none;
 }
 
+#board {
+  width: 624px;
+  margin: 0 auto;
+  background-color: black;
+  display: block;
+}
+
 #pac {
-  width: 504px;
+  width: 624px;
   margin: 0 auto;
   background: none;
+  display: block;
 }
 
 li {
@@ -27,80 +35,78 @@ li {
 }
 
 .orb-class {
-  height: 80px;
-  width: 80px;
+  height: 100px;
+  width: 100px;
   border-radius: 50px;
-  margin: 2px;
 }
 
 .orb-fire {
-  height: 80px;
-  width: 80px;
+  height: 100px;
+  width: 100px;
   background-color: firebrick;
   border-radius: 50px;
   box-shadow: 0px 0px 5px red;
-  margin: 2px;
+  margin: 1px;
 }
 
 .orb-water {
-  height: 80px;
-  width: 80px;
+  height: 100px;
+  width: 100px;
   background-color: cornflowerblue;
   border-radius: 50px;
   box-shadow: 0px 0px 5px blue;
-  margin: 2px;
+  margin: 1px;
 }
 
 .orb-wood {
-  height: 80px;
-  width: 80px;
+  height: 100px;
+  width: 100px;
   background-color: yellowgreen;
   border-radius: 50px;
   box-shadow: 0px 0px 5px green;
-  margin: 2px;
+  margin: 1px;
 }
 
 .orb-light {
-  height: 80px;
-  width: 80px;
+  height: 100px;
+  width: 100px;
   background-color: gold;
   border-radius: 50px;
   box-shadow: 0px 0px 5px gold;
-  margin: 2px;
+  margin: 1px;
 }
 
 .orb-dark {
-  height: 80px;
-  width: 80px;
+  height: 100px;
+  width: 100px;
   background-color: blueviolet;
   border-radius: 50px;
   box-shadow: 0px 0px 5px purple;
-  margin: 2px;
+  margin: 1px;
 }
 
 .orb-heart {
-  height: 80px;
-  width: 80px;
-  background-color: hotpink;
-  border-radius: 0px;
-  box-shadow: 0px 0px 5px pink;
-  margin: 2px;
+  height: 100px;
+  width: 100px;
+  margin: 1px;
 }
 
 .orb-poison {
-  height: 80px;
-  width: 80px;
-  background-color: slateblue;
-  border-radius: inherit;
-  margin: 2px;
+  height: 100px;
+  width: 100px;
+  margin: 1px;
 }
 
 .orb-jammer {
-  height: 80px;
-  width: 80px;
-  background-color: dimgrey;
-  border-radius: inherit;
-  margin: 2px;
+  height: 100px;
+  width: 100px;
+  margin: 1px;
+}
+
+.orb-mortal {
+  height: 100px;
+  width: 100px;
+  margin: 1px;
 }
 
 .group:after {
