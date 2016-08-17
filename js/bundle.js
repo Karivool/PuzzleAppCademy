@@ -47,68 +47,88 @@
 	const BoardView = __webpack_require__(1);
 	const Game = __webpack_require__(2);
 
-	$( () => {
-	  let newGame = new Game();
-	  const $pac = $('#pac');
-	  new BoardView(newGame, $pac);
+	document.addEventListener("DOMContentLoaded",
+	function() {
+	  const canvasEl =
+	  document.getElementsByTagName("canvas")[0];
+	  const ctx = canvasEl.getContext("2d");
+	  const game = new Game();
+	  new BoardView(game, ctx);
 	});
+
+	// $( () => {
+	//   let newGame = new Game();
+	//   const $pac = $('#pac');
+	//   new BoardView(newGame, $pac);
+	// });
 
 
 /***/ },
 /* 1 */
 /***/ function(module, exports) {
 
-	let BoardView = function (gameBoard, $el) {
-	  this.gameBoard = gameBoard;
-	  this.$el = $el;
-	  this.setupBoard();
-	  this.bindEvents();
-	};
-
-	BoardView.prototype.bindEvents = function () {
-	  // orb clicked and held by mouse button
-	  $('.orb').on("click", e => {
-	    const $orb = $(e.currentTarget);
-	    this.makeMove($orb);
-	  });
-	};
-
-	BoardView.prototype.makeMove = function ($orb) {
-
-	};
-
-	BoardView.prototype.setupBoard = function () {
-	  for (let i = 0; i < 5; i++) {
-	    this.addRow();
+	class BoardView {
+	  constructor(gameBoard, ctx) {
+	    this.gameBoard = gameBoard;
+	    this.ctx = ctx;
+	    this.setupBoard();
+	    this.bindEvents();
 	  }
-	};
-	BoardView.prototype.addRow = function() {
-	  const rowIdx = this.$el.find(".row").length;
-	  const $row = $("<ul>").addClass("row").addClass("group");
 
-	  for (let colIdx = 0; colIdx < 6; colIdx++) {
+	  bindEvents () {
+	    // orb clicked and held by mouse button
+	    $('.orb').on("click", e => {
+	      const $orb = $(e.currentTarget);
+	      this.makeMove($orb);
+	    });
+	  }
 
-	    let orbType = Math.round(Math.random() * 5);
+	  setupBoard () {
 
-	    if (orbType === 0) {
-	      orbType = "orb-fire";
-	    } else if (orbType === 1) {
-	      orbType = "orb-water";
-	    } else if (orbType === 2) {
-	      orbType = "orb-wood";
-	    } else if (orbType === 3) {
-	      orbType = "orb-light";
-	    } else if (orbType === 4) {
-	      orbType = "orb-dark";
-	    } else {
-	      orbType = "orb-heart";
+	    for (let i = 0; i < 6; i++) {
+	      this.addRow(i);
 	    }
-	    const $orb = $("<li>").addClass(orbType).attr("data-pos", [rowIdx, colIdx]);
-
-	    $row.append($orb);
 	  }
-	  this.$el.append($row);
-	};
+
+	  addRow (i) {
+	    for (let colIdx = 0; colIdx < 5; colIdx++) {
+	      let orbType = Math.round(Math.random() * 8);
+	      let img = new Image();
+
+	      if (orbType === 0) {
+	        orbType = "orb-fire";
+	        img.src = "img/fire.png";
+	      } else if (orbType === 1) {
+	        orbType = "orb-water";
+	        img.src = "img/water.png";
+	      } else if (orbType === 2) {
+	        orbType = "orb-wood";
+	        img.src = "img/wood.png";
+	      } else if (orbType === 3) {
+	        orbType = "orb-light";
+	        img.src = "img/light.png";
+	      } else if (orbType === 4) {
+	        orbType = "orb-dark";
+	        img.src = "img/dark.png";
+	      } else if (orbType === 5) {
+	        orbType = "orb-heart";
+	        img.src = "img/heart.png";
+	      } else if (orbType === 6) {
+	        orbType = "orb-poison";
+	        img.src = "img/poison.png";
+	      } else if (orbType === 7) {
+	        orbType = "orb-jammer";
+	        img.src = "img/jammer.png";
+	      } else {
+	        orbType = "orb-mortal";
+	        img.src = "img/mortal.png";
+	      }
+	      img.onload = function () {
+	        this.ctx.drawImage(img, (i * 100), (colIdx * 100));
+	      }.bind(this);
+	    }
+	  }
+	}
 
 	module.exports = BoardView;
 
