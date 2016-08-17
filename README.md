@@ -2,7 +2,7 @@
 A simple clone of the puzzle board for Puzzle and Dragons
 
 ### MVP
-* [ ] The board must render with different color orbs. 
+* [x] The board must render with different color orbs.
 * [ ] Picking up an orb and moving it should switch places with the nearest orb to it.
 * [ ] Orbs with matching colors should be destroyed, then skyfalls of new orbs should be made.
 * [ ] Time limit to move orbs should be implemented.
@@ -33,12 +33,12 @@ Currently, this game should not require any backend. Once it grows in complexity
 
 ### Implementation Timeline
 
-### Day 1: 
-- [ ] The board must render with different color orbs. 
-  - [ ] Create an empty board.
-  - [ ] Create individual color orbs.
-  - [ ] Start the game off with a populated board.
-  - [ ] Create nice CSS.
+### Day 1:
+- [x] The board must render with different color orbs.
+  - [x] Create an empty board.
+  - [x] Create individual color orbs.
+  - [x] Start the game off with a populated board.
+  - [x] Create nice CSS.
 
 ### Day 2:
 - [ ] Picking up an orb and moving it should switch places with the nearest orb to it.
@@ -83,4 +83,3 @@ Currently, this game should not require any backend. Once it grows in complexity
 * [ ] To-dos/future features.
 * [ ] No .DS_Stores / debuggers / console.logs.
 * [ ] Organize into /assets and /lib.
-
