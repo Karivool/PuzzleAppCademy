@@ -1,3 +1,5 @@
+const OrbObject = require('./orb_object.js');
+
 class BoardView {
   constructor(gameBoard, ctx) {
     this.gameBoard = gameBoard;
@@ -8,11 +10,6 @@ class BoardView {
   }
 
   bindEvents () {
-    // orb clicked and held by mouse button
-    $('.orb').on("click", e => {
-      const $orb = $(e.currentTarget);
-      this.makeMove($orb);
-    });
   }
 
   setupBoard () {
@@ -46,7 +43,8 @@ class BoardView {
         orbType = "orb-heart";
         img.src = "img/heart.png";
       }
-      this.orbs[colIdx].push(orbType);
+      let orbject = new OrbObject({pos: [rowIdx * 100, colIdx * 100], color: orbType, img: img.src});
+      this.orbs[colIdx].push(orbject);
 
       img.onload = function () {
         this.ctx.drawImage(img, (rowIdx * 100), (colIdx * 100));
@@ -54,6 +52,27 @@ class BoardView {
       console.log(this.orbs);
     }
   }
+
+  handleMouseDown (e) {
+    console.log(e);
+    debugger
+  }
+
+  handleMouseUp (e) {
+    console.log(e);
+    debugger
+  }
+
+  handleMouseOut (e) {
+    console.log(e);
+    debugger
+  }
+
+  handleMouseMove (e) {
+    console.log(e);
+    debugger
+  }
 }
+
 
 module.exports = BoardView;
