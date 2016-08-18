@@ -3,15 +3,14 @@ const Game = require('./game.js');
 
 document.addEventListener("DOMContentLoaded",
 function() {
-  const canvasEl =
+  const canvas =
   document.getElementsByTagName("canvas")[0];
-  const ctx = canvasEl.getContext("2d");
+  const ctx = canvas.getContext("2d");
   const game = new Game();
-  new BoardView(game, ctx);
+  const board = new BoardView(game, ctx);
+  
+  canvas.addEventListener("mousedown", board.handleMouseDown);
+  canvas.addEventListener("mousedown", board.handleMouseUp);
+  canvas.addEventListener("mousedown", board.handleMouseOut);
+  canvas.addEventListener("mousedown", board.handleMouseMove);
 });
-
-// $( () => {
-//   let newGame = new Game();
-//   const $pac = $('#pac');
-//   new BoardView(newGame, $pac);
-// });
