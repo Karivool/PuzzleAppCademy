@@ -2,6 +2,7 @@ class BoardView {
   constructor(gameBoard, ctx) {
     this.gameBoard = gameBoard;
     this.ctx = ctx;
+    this.orbs = [[], [], [], [], []];
     this.setupBoard();
     this.bindEvents();
   }
@@ -16,14 +17,14 @@ class BoardView {
 
   setupBoard () {
 
-    for (let i = 0; i < 6; i++) {
-      this.addRow(i);
+    for (let colIdx = 0; colIdx < 5; colIdx++) {
+      this.addRow(colIdx);
     }
   }
 
-  addRow (i) {
-    for (let colIdx = 0; colIdx < 5; colIdx++) {
-      let orbType = Math.round(Math.random() * 8);
+  addRow (colIdx) {
+    for (let rowIdx = 0; rowIdx < 6; rowIdx++) {
+      let orbType = Math.round(Math.random() * 5);
       let img = new Image();
 
       if (orbType === 0) {
@@ -41,22 +42,16 @@ class BoardView {
       } else if (orbType === 4) {
         orbType = "orb-dark";
         img.src = "img/dark.png";
-      } else if (orbType === 5) {
+      } else {
         orbType = "orb-heart";
         img.src = "img/heart.png";
-      } else if (orbType === 6) {
-        orbType = "orb-poison";
-        img.src = "img/poison.png";
-      } else if (orbType === 7) {
-        orbType = "orb-jammer";
-        img.src = "img/jammer.png";
-      } else {
-        orbType = "orb-mortal";
-        img.src = "img/mortal.png";
       }
+      this.orbs[colIdx].push(orbType);
+
       img.onload = function () {
-        this.ctx.drawImage(img, (i * 100), (colIdx * 100));
+        this.ctx.drawImage(img, (rowIdx * 100), (colIdx * 100));
       }.bind(this);
+      console.log(this.orbs);
     }
   }
 }
