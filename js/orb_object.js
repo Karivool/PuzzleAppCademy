@@ -1,7 +1,10 @@
 
 class OrbObject {
   constructor(params) {
-    this.pos = options.pos;
+    this.pos = params.pos;
+    this.color = params.color;
+    this.img = params.img;
+    this.dragging = false;
   }
 
   remove() {
