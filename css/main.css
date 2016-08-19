@@ -16,11 +16,21 @@ button, article, footer, small {
   list-style: none;
 }
 
+h1 {
+  font-size: 24px;
+}
+
+#game-board {
+  height: 624px;
+  width: 624px;
+  background-color: #2b1719;  
+}
+
 #board {
   width: 624px;
   margin: 0 auto;
-  background-color: #2b1719;
   display: block;
+  position: fixed;
 }
 
 #pac {
