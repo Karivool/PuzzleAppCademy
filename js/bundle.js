@@ -1,41 +1,41 @@
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
-
+/******/
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
-
+/******/
 /******/ 		// Check if module is in cache
 /******/ 		if(installedModules[moduleId])
 /******/ 			return installedModules[moduleId].exports;
-
+/******/
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = installedModules[moduleId] = {
 /******/ 			exports: {},
 /******/ 			id: moduleId,
 /******/ 			loaded: false
 /******/ 		};
-
+/******/
 /******/ 		// Execute the module function
 /******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-
+/******/
 /******/ 		// Flag the module as loaded
 /******/ 		module.loaded = true;
-
+/******/
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
-
-
+/******/
+/******/
 /******/ 	// expose the modules object (__webpack_modules__)
 /******/ 	__webpack_require__.m = modules;
-
+/******/
 /******/ 	// expose the module cache
 /******/ 	__webpack_require__.c = installedModules;
-
+/******/
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "";
-
+/******/
 /******/ 	// Load entry module and return exports
 /******/ 	return __webpack_require__(0);
 /******/ })
@@ -44,106 +44,195 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	const BoardView = __webpack_require__(1);
-	const Game = __webpack_require__(2);
-
-	document.addEventListener("DOMContentLoaded",
-	function() {
-	  const canvasEl =
-	  document.getElementsByTagName("canvas")[0];
-	  const ctx = canvasEl.getContext("2d");
-	  const game = new Game();
-	  new BoardView(game, ctx);
-	});
-
-	// $( () => {
-	//   let newGame = new Game();
-	//   const $pac = $('#pac');
-	//   new BoardView(newGame, $pac);
-	// });
+	__webpack_require__(1);
+	__webpack_require__(1);
+	module.exports = __webpack_require__(6);
 
 
 /***/ },
 /* 1 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	class BoardView {
-	  constructor(gameBoard, ctx) {
-	    this.gameBoard = gameBoard;
-	    this.ctx = ctx;
-	    this.setupBoard();
-	    this.bindEvents();
-	  }
-
-	  bindEvents () {
-	    // orb clicked and held by mouse button
-	    $('.orb').on("click", e => {
-	      const $orb = $(e.currentTarget);
-	      this.makeMove($orb);
-	    });
-	  }
-
-	  setupBoard () {
-
-	    for (let i = 0; i < 6; i++) {
-	      this.addRow(i);
-	    }
-	  }
-
-	  addRow (i) {
-	    for (let colIdx = 0; colIdx < 5; colIdx++) {
-	      let orbType = Math.round(Math.random() * 8);
-	      let img = new Image();
-
-	      if (orbType === 0) {
-	        orbType = "orb-fire";
-	        img.src = "img/fire.png";
-	      } else if (orbType === 1) {
-	        orbType = "orb-water";
-	        img.src = "img/water.png";
-	      } else if (orbType === 2) {
-	        orbType = "orb-wood";
-	        img.src = "img/wood.png";
-	      } else if (orbType === 3) {
-	        orbType = "orb-light";
-	        img.src = "img/light.png";
-	      } else if (orbType === 4) {
-	        orbType = "orb-dark";
-	        img.src = "img/dark.png";
-	      } else if (orbType === 5) {
-	        orbType = "orb-heart";
-	        img.src = "img/heart.png";
-	      } else if (orbType === 6) {
-	        orbType = "orb-poison";
-	        img.src = "img/poison.png";
-	      } else if (orbType === 7) {
-	        orbType = "orb-jammer";
-	        img.src = "img/jammer.png";
-	      } else {
-	        orbType = "orb-mortal";
-	        img.src = "img/mortal.png";
-	      }
-	      img.onload = function () {
-	        this.ctx.drawImage(img, (i * 100), (colIdx * 100));
-	      }.bind(this);
-	    }
-	  }
-	}
-
-	module.exports = BoardView;
+	const BoardView = __webpack_require__(2);
+	const Game = __webpack_require__(4);
+	
+	document.addEventListener("DOMContentLoaded",
+	function() {
+	  const canvas =
+	  document.getElementsByTagName("canvas")[0];
+	  const ctx = canvas.getContext("2d");
+	  const stage = new Kinetic.Stage({
+	    container: 'game-board',
+	    width: 594,
+	    height: 494,
+	  });
+	  const game = new Game();
+	  const board = new BoardView(stage, game, ctx);
+	});
 
 
 /***/ },
 /* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
-	const Board = __webpack_require__(3);
-
-	function Game () {
-	  this.board = new Board();
+	const OrbObject = __webpack_require__(3);
+	// const Kinetic = require('../kinetic-v5.1.0.js');
+	
+	// 356 356 35697 45752 1241
+	// 356 356 35697 45752 1241
+	
+	class BoardView {
+	  constructor(stage, gameBoard, ctx) {
+	    this.stage = stage;
+	    this.gameBoard = gameBoard;
+	    this.ctx = ctx;
+	    this.orbs = [[], [], [], [], []];
+	    this.orbCanvases = [];
+	    this.setupBoard();
+	    this.renderImages();
+	    debugger
+	  }
+	
+	  renderImages () {
+	
+	    this.orbData = [].concat.apply([], this.orbs);
+	
+	    for (let orb = 0; orb < this.orbCanvases.length; orb++) {
+	      let orbCanvas = this.orbCanvases[orb];
+	      this.createImage(orbCanvas, this.orbData[orb]);
+	    }
+	  }
+	
+	  setupBoard () {
+	    for (let colIdx = 0; colIdx < 5; colIdx++) {
+	      this.addRow(colIdx);
+	    }
+	
+	    this.renderBoard();
+	  }
+	
+	  addRow (colIdx) {
+	    for (let rowIdx = 0; rowIdx < 6; rowIdx++) {
+	      let orbType = Math.round(Math.random() * 5);
+	      let src;
+	      let orbColor;
+	
+	      if (orbType === 0) {
+	          orbType = "orb-fire";
+	          src = "./img/fire.png";
+	          orbColor = "#990000";
+	        } else if (orbType === 1) {
+	          orbType = "orb-water";
+	          src = "./img/water.png";
+	          orbColor = "#112288";
+	        } else if (orbType === 2) {
+	          orbType = "orb-wood";
+	          src = "./img/wood.png";
+	          orbColor = "#005544";
+	        } else if (orbType === 3) {
+	          orbType = "orb-light";
+	          src = "./img/light.png";
+	          orbColor = "#776611";
+	        } else if (orbType === 4) {
+	          orbType = "orb-dark";
+	          src = "./img/dark.png";
+	          orbColor = "#772299";
+	        } else {
+	          orbType = "orb-heart";
+	          src = "./img/heart.png";
+	          orbColor = "#dd2277";
+	      }
+	      let orbject1 = new Kinetic.Circle({
+	        x: (rowIdx + 0.5) * 100, y: (colIdx + 0.5) * 100,
+	        width: 65, height: 65,
+	        fill: orbColor, draggable: true
+	      });
+	      // let orbject = new OrbObject({pos: [rowIdx * 100, colIdx * 100], color: orbType, img: src});
+	      this.orbs[colIdx].push(orbject1);
+	    }
+	  }
+	
+	  doLoad (orbCtx, img, x, y) {
+	    console.log(`Current orb: ${orbCtx.canvas.id} || Drawing orb: ${img.src}`);
+	    orbCtx.drawImage(img, x, y);
+	  }
+	
+	  createImage(orbCanvas, thisOrb) {
+	    let canvas = document.getElementById(orbCanvas);
+	    let orbCtx = canvas.getContext("2d");
+	    let x = thisOrb.pos[0];
+	    let y = thisOrb.pos[1];
+	    let img = new Image();
+	    let color = thisOrb.color;
+	    img.src = thisOrb.img;
+	    img.onload = function () {
+	      console.log(`Current orb: ${orbCtx.canvas.id} || Drawing orb: ${img.src}`);
+	      orbCtx.drawImage(img, x, y);
+	    }.bind(null, orbCtx, img, x, y);
+	  }
+	
+	  renderBoard () {
+	
+	    for (let row = 0; row < this.orbs.length; row++) {
+	      for (let orb = 0; orb < this.orbs[row].length; orb++) {
+	
+	        let orbCanvas = document.createElement("canvas");
+	        orbCanvas.id = `orb${row}${orb}`;
+	        orbCanvas.width = 100;
+	        orbCanvas.height = 100;
+	
+	        let div = document.getElementById("game-play");
+	        // debugger
+	        let orbCtx = orbCanvas.getContext("2d");
+	
+	        var layer = new Kinetic.Layer();
+	
+	        // add the rectangle to the layer
+	        layer.add(this.orbs[row][orb]);
+	
+	        // add the layer to the stage
+	        this.stage.add(layer);
+	
+	        // orbCtx.fillStyle = "aliceblue";
+	        // orbCtx.beginPath();
+	        // orbCtx.arc(
+	        //   50, 50, 33, 0, 2 * Math.PI, true
+	        // );
+	        // orbCtx.fill();
+	
+	        // div.appendChild(orbCanvas);
+	
+	        orbCanvas.addEventListener("mousedown", this.handleMouseDown);
+	        orbCanvas.addEventListener("mouseup", this.handleMouseUp);
+	        orbCanvas.addEventListener("mouseout", this.handleMouseOut);
+	        orbCanvas.addEventListener("mousemove", this.handleMouseMove);
+	
+	        this.orbCanvases.push(orbCanvas.id);
+	      }
+	    }
+	  }
+	
+	  handleMouseDown (e) {
+	    if (e.type == "mousedown") {
+	
+	      console.log(`Mouse held on ${e.currentTarget.id}`);
+	    }
+	    // $(e.currentTarget).css({left:e.pageX, top:e.pageY});
+	  }
+	
+	  handleMouseUp (e) {
+	  }
+	
+	  handleMouseOut (e) {
+	  }
+	
+	  handleMouseMove (e) {
+	    debugger
+	  }
 	}
-
-	module.exports = Game;
+	
+	
+	module.exports = BoardView;
 
 
 /***/ },
@@ -151,16 +240,336 @@
 /***/ function(module, exports) {
 
 	
+	class OrbObject {
+	  constructor(params) {
+	    this.pos = params.pos;
+	    this.color = params.color;
+	    this.img = params.img;
+	    this.dragging = false;
+	  }
+	
+	  remove() {
+	    this.game.remove(this);
+	  }
+	}
+	
+	module.exports = OrbObject;
+
+
+/***/ },
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	const Board = __webpack_require__(5);
+	
+	function Game () {
+	  this.board = new Board();
+	}
+	
+	module.exports = Game;
+
+
+/***/ },
+/* 5 */
+/***/ function(module, exports) {
+
+	
 	function Board () {
 	  this.grid = Board.makeGrid();
 	}
-
+	
 	Board.makeGrid = function() {
 	  return [];
 	};
-
+	
 	module.exports = Board;
 
 
+/***/ },
+/* 6 */
+/***/ function(module, exports) {
+
+	/******/ (function(modules) { // webpackBootstrap
+	/******/ 	// The module cache
+	/******/ 	var installedModules = {};
+	
+	/******/ 	// The require function
+	/******/ 	function __webpack_require__(moduleId) {
+	
+	/******/ 		// Check if module is in cache
+	/******/ 		if(installedModules[moduleId])
+	/******/ 			return installedModules[moduleId].exports;
+	
+	/******/ 		// Create a new module (and put it into the cache)
+	/******/ 		var module = installedModules[moduleId] = {
+	/******/ 			exports: {},
+	/******/ 			id: moduleId,
+	/******/ 			loaded: false
+	/******/ 		};
+	
+	/******/ 		// Execute the module function
+	/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+	
+	/******/ 		// Flag the module as loaded
+	/******/ 		module.loaded = true;
+	
+	/******/ 		// Return the exports of the module
+	/******/ 		return module.exports;
+	/******/ 	}
+	
+	
+	/******/ 	// expose the modules object (__webpack_modules__)
+	/******/ 	__webpack_require__.m = modules;
+	
+	/******/ 	// expose the module cache
+	/******/ 	__webpack_require__.c = installedModules;
+	
+	/******/ 	// __webpack_public_path__
+	/******/ 	__webpack_require__.p = "";
+	
+	/******/ 	// Load entry module and return exports
+	/******/ 	return __webpack_require__(0);
+	/******/ })
+	/************************************************************************/
+	/******/ ([
+	/* 0 */
+	/***/ function(module, exports, __webpack_require__) {
+	
+		const BoardView = __webpack_require__(1);
+		const Game = __webpack_require__(2);
+	
+		document.addEventListener("DOMContentLoaded",
+		function() {
+		  const canvas =
+		  document.getElementsByTagName("canvas")[0];
+		  const ctx = canvas.getContext("2d");
+		  const stage = new Kinetic.Stage({
+		    container: 'game-board',
+		    width: 594,
+		    height: 494,
+		  });
+		  const game = new Game();
+		  const board = new BoardView(stage, game, ctx);
+		});
+	
+	
+	/***/ },
+	/* 1 */
+	/***/ function(module, exports, __webpack_require__) {
+	
+		const OrbObject = __webpack_require__(4);
+		// const Kinetic = require('../kinetic-v5.1.0.js');
+	
+		// 356 356 35697 45752 1241
+		// 356 356 35697 45752 1241
+	
+		class BoardView {
+		  constructor(stage, gameBoard, ctx) {
+		    this.stage = stage;
+		    this.gameBoard = gameBoard;
+		    this.ctx = ctx;
+		    this.orbs = [[], [], [], [], []];
+		    this.orbCanvases = [];
+		    this.setupBoard();
+		    this.renderImages();
+		    debugger
+		  }
+	
+		  renderImages () {
+	
+		    this.orbData = [].concat.apply([], this.orbs);
+	
+		    for (let orb = 0; orb < this.orbCanvases.length; orb++) {
+		      let orbCanvas = this.orbCanvases[orb];
+		      this.createImage(orbCanvas, this.orbData[orb]);
+		    }
+		  }
+	
+		  setupBoard () {
+		    for (let colIdx = 0; colIdx < 5; colIdx++) {
+		      this.addRow(colIdx);
+		    }
+	
+		    this.renderBoard();
+		  }
+	
+		  addRow (colIdx) {
+		    for (let rowIdx = 0; rowIdx < 6; rowIdx++) {
+		      let orbType = Math.round(Math.random() * 5);
+		      let src;
+		      let orbColor;
+	
+		      if (orbType === 0) {
+		          orbType = "orb-fire";
+		          src = "./img/fire.png";
+		          orbColor = "#990000";
+		        } else if (orbType === 1) {
+		          orbType = "orb-water";
+		          src = "./img/water.png";
+		          orbColor = "#112288";
+		        } else if (orbType === 2) {
+		          orbType = "orb-wood";
+		          src = "./img/wood.png";
+		          orbColor = "#005544";
+		        } else if (orbType === 3) {
+		          orbType = "orb-light";
+		          src = "./img/light.png";
+		          orbColor = "#776611";
+		        } else if (orbType === 4) {
+		          orbType = "orb-dark";
+		          src = "./img/dark.png";
+		          orbColor = "#772299";
+		        } else {
+		          orbType = "orb-heart";
+		          src = "./img/heart.png";
+		          orbColor = "#dd2277";
+		      }
+		      let orbject1 = new Kinetic.Circle({
+		        x: (rowIdx + 0.5) * 100, y: (colIdx + 0.5) * 100,
+		        width: 65, height: 65,
+		        fill: orbColor, draggable: true
+		      });
+		      // let orbject = new OrbObject({pos: [rowIdx * 100, colIdx * 100], color: orbType, img: src});
+		      this.orbs[colIdx].push(orbject1);
+		    }
+		  }
+	
+		  doLoad (orbCtx, img, x, y) {
+		    console.log(`Current orb: ${orbCtx.canvas.id} || Drawing orb: ${img.src}`);
+		    orbCtx.drawImage(img, x, y);
+		  }
+	
+		  createImage(orbCanvas, thisOrb) {
+		    let canvas = document.getElementById(orbCanvas);
+		    let orbCtx = canvas.getContext("2d");
+		    let x = thisOrb.pos[0];
+		    let y = thisOrb.pos[1];
+		    let img = new Image();
+		    let color = thisOrb.color;
+		    img.src = thisOrb.img;
+		    img.onload = function () {
+		      console.log(`Current orb: ${orbCtx.canvas.id} || Drawing orb: ${img.src}`);
+		      orbCtx.drawImage(img, x, y);
+		    }.bind(null, orbCtx, img, x, y);
+		  }
+	
+		  renderBoard () {
+	
+		    for (let row = 0; row < this.orbs.length; row++) {
+		      for (let orb = 0; orb < this.orbs[row].length; orb++) {
+	
+		        let orbCanvas = document.createElement("canvas");
+		        orbCanvas.id = `orb${row}${orb}`;
+		        orbCanvas.width = 100;
+		        orbCanvas.height = 100;
+	
+		        let div = document.getElementById("game-play");
+		        // debugger
+		        let orbCtx = orbCanvas.getContext("2d");
+	
+		        var layer = new Kinetic.Layer();
+	
+		        // add the rectangle to the layer
+		        layer.add(this.orbs[row][orb]);
+	
+		        // add the layer to the stage
+		        this.stage.add(layer);
+	
+		        // orbCtx.fillStyle = "aliceblue";
+		        // orbCtx.beginPath();
+		        // orbCtx.arc(
+		        //   50, 50, 33, 0, 2 * Math.PI, true
+		        // );
+		        // orbCtx.fill();
+	
+		        // div.appendChild(orbCanvas);
+	
+		        orbCanvas.addEventListener("mousedown", this.handleMouseDown);
+		        orbCanvas.addEventListener("mouseup", this.handleMouseUp);
+		        orbCanvas.addEventListener("mouseout", this.handleMouseOut);
+		        orbCanvas.addEventListener("mousemove", this.handleMouseMove);
+	
+		        this.orbCanvases.push(orbCanvas.id);
+		      }
+		    }
+		  }
+	
+		  handleMouseDown (e) {
+		    if (e.type == "mousedown") {
+	
+		      console.log(`Mouse held on ${e.currentTarget.id}`);
+		    }
+		    // $(e.currentTarget).css({left:e.pageX, top:e.pageY});
+		  }
+	
+		  handleMouseUp (e) {
+		  }
+	
+		  handleMouseOut (e) {
+		  }
+	
+		  handleMouseMove (e) {
+		    debugger
+		  }
+		}
+	
+	
+		module.exports = BoardView;
+	
+	
+	/***/ },
+	/* 2 */
+	/***/ function(module, exports, __webpack_require__) {
+	
+		const Board = __webpack_require__(3);
+	
+		function Game () {
+		  this.board = new Board();
+		}
+	
+		module.exports = Game;
+	
+	
+	/***/ },
+	/* 3 */
+	/***/ function(module, exports) {
+	
+		
+		function Board () {
+		  this.grid = Board.makeGrid();
+		}
+	
+		Board.makeGrid = function() {
+		  return [];
+		};
+	
+		module.exports = Board;
+	
+	
+	/***/ },
+	/* 4 */
+	/***/ function(module, exports) {
+	
+		
+		class OrbObject {
+		  constructor(params) {
+		    this.pos = params.pos;
+		    this.color = params.color;
+		    this.img = params.img;
+		    this.dragging = false;
+		  }
+	
+		  remove() {
+		    this.game.remove(this);
+		  }
+		}
+	
+		module.exports = OrbObject;
+	
+	
+	/***/ }
+	/******/ ]);
+
 /***/ }
 /******/ ]);
+//# sourceMappingURL=bundle.js.map
