@@ -8,7 +8,7 @@ function() {
   const ctx = canvas.getContext("2d");
   const stage = new Kinetic.Stage({
     container: 'game-board',
-    width: 594,
+    width: 604,
     height: 494,
   });
   const game = new Game();
