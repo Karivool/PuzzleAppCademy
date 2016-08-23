@@ -13,6 +13,8 @@ class BoardView {
     this.moving = false;
     this.setupBoard();
     this.renderImages();
+    window.orbs = this.hashOrbs(this.orbs);
+    window.stage = this.stage;
   }
 
   renderImages () {
@@ -64,13 +66,17 @@ class BoardView {
           src = "./img/heart.png";
           orbColor = "#dd2277";
       }
-      let orbject1 = new Kinetic.Circle({
+      let orbject = new Kinetic.Circle({
         x: (rowIdx + 0.5) * 100, y: (colIdx + 0.5) * 100,
         width: 100, height: 100,
-        fill: orbColor, draggable: true
+        fill: orbColor, draggable: true, orbId: `orb${colIdx}${rowIdx}`
       });
-      // let orbject = new OrbObject({pos: [rowIdx * 100, colIdx * 100], color: orbType, img: src});
-      this.orbs[colIdx].push(orbject1);
+      orbject.on("mousedown", this.handleMouseDown);
+      orbject.on("mouseup", this.handleMouseUp);
+      orbject.on("mouseout", this.handleMouseOut);
+      orbject.on("mousemove", this.handleMouseMove);
+
+      this.orbs[colIdx].push(orbject);
     }
   }
 
@@ -80,87 +86,111 @@ class BoardView {
   }
 
   createImage(orbCanvas, thisOrb) {
-    let canvas = document.getElementById(orbCanvas);
-    let orbCtx = canvas.getContext("2d");
-    let x = thisOrb.pos[0];
-    let y = thisOrb.pos[1];
-    let img = new Image();
-    let color = thisOrb.color;
-    img.src = thisOrb.img;
-    img.onload = function () {
-      console.log(`Current orb: ${orbCtx.canvas.id} || Drawing orb: ${img.src}`);
-      orbCtx.drawImage(img, x, y);
-    }.bind(null, orbCtx, img, x, y);
+    // let canvas = document.getElementById(orbCanvas);
+    // let orbCtx = canvas.getContext("2d");
+    // let x = thisOrb.pos[0];
+    // let y = thisOrb.pos[1];
+    // let img = new Image();
+    // let color = thisOrb.color;
+    // img.src = thisOrb.img;
+    // img.onload = function () {
+    //   console.log(`Current orb: ${orbCtx.canvas.id} || Drawing orb: ${img.src}`);
+    //   orbCtx.drawImage(img, x, y);
+    // }.bind(null, orbCtx, img, x, y);
   }
 
   renderBoard () {
 
     for (let row = 0; row < this.orbs.length; row++) {
       for (let orb = 0; orb < this.orbs[row].length; orb++) {
+        let layer = new Kinetic.Layer();
 
-        let orbCanvas = document.createElement("canvas");
-        orbCanvas.id = `orb${row}${orb}`;
-        orbCanvas.width = 100;
-        orbCanvas.height = 100;
+        // let orbCanvas = document.createElement("canvas");
+        // orbCanvas.id = `orb${row}${orb}`;
+        // orbCanvas.width = 100;
+        // orbCanvas.height = 100;
 
-        let div = document.getElementById("game-play");
-        // debugger
-        let orbCtx = orbCanvas.getContext("2d");
+        // let div = document.getElementById("game-play");
+        // let orbCtx = orbCanvas.getContext("2d");
 
-        var layer = new Kinetic.Layer();
-
-        // add the rectangle to the layer
         layer.add(this.orbs[row][orb]);
-        layer.moving = false;
-        layer.orbId = orbCanvas.id;
-        layer.pos = [this.orbs[row][orb].attrs.x, this.orbs[row][orb].attrs.y];
-        // add the layer to the stage
+
+        // this.orbCanvases.push(orbCanvas.id);
         this.stage.add(layer);
-
-        // orbCtx.fillStyle = "aliceblue";
-        // orbCtx.beginPath();
-        // orbCtx.arc(
-        //   50, 50, 33, 0, 2 * Math.PI, true
-        // );
-        // orbCtx.fill();
-
-        // div.appendChild(orbCanvas);
-        layer.on("mousedown", this.handleMouseDown);
-        layer.on("mouseup", this.handleMouseUp);
-        layer.on("mouseout", this.handleMouseOut);
-        layer.on("mousemove", this.handleMouseMove);
-
-        this.orbCanvases.push(orbCanvas.id);
       }
     }
   }
 
-  handleMouseDown (e) {
-    window.currentOrb = this;
-    console.log(window.currentOrb.orbId);
+  hashOrbs(orbs) {
+    let allOrbs = {};
+    for (let row = 0; row < this.orbs.length; row++) {
+      for (let orb = 0; orb < this.orbs[row].length; orb++) {
+        allOrbs[`orb${row}${orb}`] = orbs[row][orb];
+      }
+    }
+    return allOrbs;
+  }
 
-    this.moving = true;
+  handleMouseDown (e) {
+    window.currentOrb = window.orbs[e.target.attrs.orbId];
+    window.newX = e.target.attrs.x;
+    window.newY = e.target.attrs.y;
   }
 
   handleMouseUp (e) {
+    window.currentOrb.x(window.newX);
+    window.currentOrb.y(window.newY);
+    window.currentOrb.parent.clear();
+    window.currentOrb.parent.draw();
+    window.currentOrb.draw();
     window.currentOrb = undefined;
-    this.moving = false;
   }
 
   handleMouseOut (e) {
   }
 
   handleMouseMove (e) {
-    if (window.currentOrb !== undefined && window.currentOrb.orbId != this.orbId) {
-      // debugger
-      this.children[0].attrs.x = window.currentOrb.pos[0];
-      this.children[0].attrs.y = window.currentOrb.pos[1];
-      // console.log(this.children[0]);
-      this.children[0].draw();
-    } else {
+    console.log(e.target.attrs.orbId);
+
+    if (window.currentOrb !== undefined && (window.currentOrb.attrs.orbId !== e.target.attrs.orbId)) {
+      let targOrbX = e.target.attrs.x;
+      let targOrbY = e.target.attrs.y;
+      // This is the target orb that's being changed's value
+      // We're storing this in targOrb
+
+      e.target.x(window.newX);
+      e.target.y(window.newY);
+      e.target.parent.clear();
+      e.target.parent.draw();
+      e.target.draw();
+
+      // Here we have the previously set current orb's position becoming
+      // the target orb's position
+
+      window.newX = targOrbX;
+      window.newY = targOrbY;
+      // Now that the move is made, we can set the newX and Y to be the
+      // target orb's position once mouseup
     }
   }
 }
 
 
 module.exports = BoardView;
+
+// When the mouse event's position enters the second orb? If yes, hit test the mouse vs every non-dragging orb:
+// // pseudo-code -- make this test for every non-dragging orb
+// var dx=mouseX-orb[n].x;
+// var dy=mouseY-orb[n].y;
+// if(dx*dx+dy*dy<orb[n].radius){
+//     // change orb[n]'s x,y to the dragging orb's x,y (and optionally re-render)
+// }
+// When the dragging orb intersects the second orb? If yes, collision test the dragging orb vs every non-dragging orb:
+// // pseudo-code -- make this test for every non-dragging orb
+// var dx=orb[draggingIndex].x-orb[n].x;
+// var dy=orb[draggingIndex].y-orb[n].y;
+// var rSum=orb[draggingIndex].radius+orb[n].radius;
+// if(dx*dx+dy*dy<=rSum*rSum){
+//     // change orb[n]'s x,y to the dragging orb's x,y (and optionally re-render)
+// }
+// BTW, if you drag an orb over all other orbs, the other orbs will all stack on the dragging orbs original position -- is that what you want?
