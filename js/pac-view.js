@@ -1,5 +1,4 @@
 const OrbObject = require('./orb_object.js');
-// const Kinetic = require('../kinetic-v5.1.0.js');
 
 // 356 356 35697 45752 1241
 // 356 356 35697 45752 1241
@@ -11,9 +10,9 @@ class BoardView {
     this.ctx = ctx;
     this.orbs = [[], [], [], [], []];
     this.orbCanvases = [];
+    this.moving = false;
     this.setupBoard();
     this.renderImages();
-    debugger
   }
 
   renderImages () {
@@ -67,7 +66,7 @@ class BoardView {
       }
       let orbject1 = new Kinetic.Circle({
         x: (rowIdx + 0.5) * 100, y: (colIdx + 0.5) * 100,
-        width: 65, height: 65,
+        width: 100, height: 100,
         fill: orbColor, draggable: true
       });
       // let orbject = new OrbObject({pos: [rowIdx * 100, colIdx * 100], color: orbType, img: src});
@@ -112,7 +111,9 @@ class BoardView {
 
         // add the rectangle to the layer
         layer.add(this.orbs[row][orb]);
-
+        layer.moving = false;
+        layer.orbId = orbCanvas.id;
+        layer.pos = [this.orbs[row][orb].attrs.x, this.orbs[row][orb].attrs.y];
         // add the layer to the stage
         this.stage.add(layer);
 
@@ -124,11 +125,10 @@ class BoardView {
         // orbCtx.fill();
 
         // div.appendChild(orbCanvas);
-
-        orbCanvas.addEventListener("mousedown", this.handleMouseDown);
-        orbCanvas.addEventListener("mouseup", this.handleMouseUp);
-        orbCanvas.addEventListener("mouseout", this.handleMouseOut);
-        orbCanvas.addEventListener("mousemove", this.handleMouseMove);
+        layer.on("mousedown", this.handleMouseDown);
+        layer.on("mouseup", this.handleMouseUp);
+        layer.on("mouseout", this.handleMouseOut);
+        layer.on("mousemove", this.handleMouseMove);
 
         this.orbCanvases.push(orbCanvas.id);
       }
@@ -136,21 +136,29 @@ class BoardView {
   }
 
   handleMouseDown (e) {
-    if (e.type == "mousedown") {
+    window.currentOrb = this;
+    console.log(window.currentOrb.orbId);
 
-      console.log(`Mouse held on ${e.currentTarget.id}`);
-    }
-    // $(e.currentTarget).css({left:e.pageX, top:e.pageY});
+    this.moving = true;
   }
 
   handleMouseUp (e) {
+    window.currentOrb = undefined;
+    this.moving = false;
   }
 
   handleMouseOut (e) {
   }
 
   handleMouseMove (e) {
-    debugger
+    if (window.currentOrb !== undefined && window.currentOrb.orbId != this.orbId) {
+      // debugger
+      this.children[0].attrs.x = window.currentOrb.pos[0];
+      this.children[0].attrs.y = window.currentOrb.pos[1];
+      // console.log(this.children[0]);
+      this.children[0].draw();
+    } else {
+    }
   }
 }
 
