@@ -15,6 +15,7 @@ class BoardView {
     this.renderImages();
     window.stage = this.stage;
     window.orbMove = new Audio('orb_move.mp3');
+    window.movedOrbs = [];
   }
 
   renderImages () {
@@ -41,27 +42,27 @@ class BoardView {
 
       if (orbType === 0) {
           orbType = "orb-fire";
-          src = "./img/fire.png";
+          src = "./img/fire-mac.png";
           orbColor = "#990000";
         } else if (orbType === 1) {
           orbType = "orb-water";
-          src = "./img/water.png";
+          src = "./img/water-pizza.png";
           orbColor = "#112288";
         } else if (orbType === 2) {
           orbType = "orb-wood";
-          src = "./img/wood.png";
+          src = "./img/wood-jul.png";
           orbColor = "#005544";
         } else if (orbType === 3) {
           orbType = "orb-light";
-          src = "./img/light.png";
+          src = "./img/light-steph.png";
           orbColor = "#776611";
         } else if (orbType === 4) {
           orbType = "orb-dark";
-          src = "./img/dark.png";
+          src = "./img/dark-jess.png";
           orbColor = "#772299";
         } else {
           orbType = "orb-heart";
-          src = "./img/heart.png";
+          src = "./img/heart-tom.png";
           orbColor = "#dd2277";
       }
       let orbject = new Kinetic.Circle({
@@ -129,6 +130,7 @@ class BoardView {
 
   handleMouseDown (e) {
     window.currentOrb = e.target;
+    window.currentOrb.attrs.opacity = 0;
     window.newX = e.target.attrs.x;
     window.newY = e.target.attrs.y;
   }
@@ -136,6 +138,7 @@ class BoardView {
   handleMouseUp (e) {
     window.currentOrb.x(window.newX);
     window.currentOrb.y(window.newY);
+    window.currentOrb.attrs.opacity = 1;
     window.currentOrb.parent.clear();
     window.currentOrb.parent.draw();
     window.currentOrb.draw();
@@ -153,10 +156,12 @@ class BoardView {
   handleMouseMove (e) {
     console.log(e.target.attrs.orbId);
 
+
     if (window.currentOrb !== undefined && (window.currentOrb.attrs.orbId !== e.target.attrs.orbId)) {
       window.orbMove.pause();
       window.currentTime = 0;
       window.orbMove.play();
+
       let targOrbX = e.target.attrs.x;
       let targOrbY = e.target.attrs.y;
       // This is the target orb that's being changed's value
@@ -168,12 +173,16 @@ class BoardView {
       e.target.parent.add(e.target);
       e.target.parent.draw();
 
+      window.movedOrbs.push(e.target);
       // Here we have the previously set current orb's position becoming
       // the target orb's position
 
       window.newX = targOrbX;
       window.newY = targOrbY;
 
+      if (window.movedOrbs.length > 0){
+        // debugger
+      }
       // Now that the move is made, we can set the newX and Y to be the
       // target orb's position once mouseup
     }

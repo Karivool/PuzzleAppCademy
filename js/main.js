@@ -9,7 +9,7 @@ function() {
   const stage = new Kinetic.Stage({
     container: 'game-board',
     width: 604,
-    height: 494,
+    height: 524,
   });
   const game = new Game();
   const board = new BoardView(stage, game, ctx);
