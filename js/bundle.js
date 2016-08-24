@@ -235,7 +235,6 @@
 	      e.target.parent.clear();
 	      e.target.parent.add(e.target);
 	      e.target.parent.draw();
-	      // debugger
 	
 	      // Here we have the previously set current orb's position becoming
 	      // the target orb's position
