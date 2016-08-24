@@ -42,8 +42,8 @@ Currently, this game should not require any backend. Once it grows in complexity
 
 ### Day 2:
 - [ ] Picking up an orb and moving it should switch places with the nearest orb to it.
-  - [ ] Pick up an orb with the mouse.
-  - [ ] Let go of an orb with the mouse.
+  - [x] Pick up an orb with the mouse.
+  - [x] Let go of an orb with the mouse.
   - [ ] Move an orb to switch places with another orb.
   - [ ] Create nice CSS.
 
