@@ -17,7 +17,30 @@ button, article, footer, small {
 }
 
 h1 {
-  font-size: 24px;
+  font-family: 'Passion One', cursive;
+  font-style: italic;
+  font-size: 42px;
+  text-shadow: 5px 0 #3F0B2A, 0 3px #3F0B2A, 0px 0 #3F0B2A, 0 5px white;
+  text-indent: 0;
+  text-align: center;
+}
+
+#title {
+  display: flex;
+  background: -webkit-linear-gradient(#832fd8, #1c176d);
+  padding: 8px;
+}
+
+#puzzle {
+  color: #f252c1;
+}
+
+#and {
+  color: #3b6cf8;
+}
+
+#dragons {
+  color: #ff4c07;
 }
 
 #game-board {
