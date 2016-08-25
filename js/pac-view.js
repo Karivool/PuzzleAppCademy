@@ -14,8 +14,9 @@ class BoardView {
     window.orbs = this.orbCanvases;
     this.renderImages();
     window.stage = this.stage;
-    window.orbMove = new Audio('orb_move.mp3');
+    window.orbMove = new Audio('coin5.mp3');
     window.movedOrbs = [];
+    window.clicked = false;
   }
 
   renderImages () {
@@ -42,27 +43,27 @@ class BoardView {
 
       if (orbType === 0) {
           orbType = "orb-fire";
-          src = "./img/fire-mac.png";
+          src = "./img/fire-pin.png";
           orbColor = "#990000";
         } else if (orbType === 1) {
           orbType = "orb-water";
-          src = "./img/water-pizza.png";
+          src = "./img/water-pin.png";
           orbColor = "#112288";
         } else if (orbType === 2) {
           orbType = "orb-wood";
-          src = "./img/wood-jul.png";
+          src = "./img/wood-pin.png";
           orbColor = "#005544";
         } else if (orbType === 3) {
           orbType = "orb-light";
-          src = "./img/light-steph.png";
+          src = "./img/light-pin.png";
           orbColor = "#776611";
         } else if (orbType === 4) {
           orbType = "orb-dark";
-          src = "./img/dark-jess.png";
+          src = "./img/dark-pin.png";
           orbColor = "#772299";
         } else {
           orbType = "orb-heart";
-          src = "./img/heart-tom.png";
+          src = "./img/heart-pin.png";
           orbColor = "#dd2277";
       }
       let orbject = new Kinetic.Circle({
@@ -95,6 +96,7 @@ class BoardView {
     layer.on("mouseup", that.handleMouseUp);
     layer.on("mouseout", that.handleMouseOut);
     layer.on("mousemove", that.handleMouseMove);
+    layer.on("click", that.handleMouseClick);
   }
 
   createImage(thisOrb, orb) {
@@ -128,20 +130,29 @@ class BoardView {
     // return allOrbs;
   }
 
+
   handleMouseDown (e) {
+    // window.clicked = !window.clicked;
     window.currentOrb = e.target;
-    window.currentOrb.attrs.opacity = 0;
     window.newX = e.target.attrs.x;
     window.newY = e.target.attrs.y;
+    console.log(window.currentOrb);
+    // if (window.clicked) {
+    //   window.currentOrb.hide();
+    // } else {
+    //   window.currentOrb.show();
+    // }
+    window.currentOrb.draw();
   }
 
   handleMouseUp (e) {
+    // window.currentOrb.show();
+    // window.currentOrb.draw();
     window.currentOrb.x(window.newX);
     window.currentOrb.y(window.newY);
     window.currentOrb.attrs.opacity = 1;
     window.currentOrb.parent.clear();
     window.currentOrb.parent.draw();
-    window.currentOrb.draw();
     window.currentOrb = undefined;
     for (let i = 0; i < 5; i++) {
       for (let j = 0; j < 6; j++) {
@@ -166,7 +177,7 @@ class BoardView {
       let targOrbY = e.target.attrs.y;
       // This is the target orb that's being changed's value
       // We're storing this in targOrb
-
+      // debugger
       e.target.x(window.newX);
       e.target.y(window.newY);
       e.target.parent.clear();
