@@ -46,7 +46,7 @@ h1 {
 #game-board {
   height: 504px;
   width: 604px;
-  background-color: #2b1719;
+  background: -webkit-linear-gradient(#bf5895, #1c176d);
 }
 
 #board {
