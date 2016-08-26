@@ -85,6 +85,8 @@
 	    window.orbMove = new Audio('coin5.mp3');
 	    window.movedOrbs = [];
 	    window.clicked = false;
+	    window.handleMouseMove = this.handleMouseMove;
+	    window.orbArray = this.orbs;
 	  }
 	
 	  renderImages () {
@@ -148,12 +150,13 @@
 	    }
 	  }
 	
-	  doLoad (that, layer, img, orb) {
+	  doLoad (that, layer, img, orb, pos) {
 	    Image = new Kinetic.Image({
 	      x: orb.attrs.x - 50, y: orb.attrs.y - 50,
 	      width: 100, height: 100,
-	      image: img,
-	      draggable: true, orbId: orb.attrs.orbId
+	      image: img, pos: pos,
+	      draggable: true, orbId: orb.attrs.orbId,
+	      matched: false, matchId: 0
 	    });
 	    layer.add(Image);
 	    layer.draw();
@@ -164,7 +167,6 @@
 	    layer.on("mouseup", that.handleMouseUp);
 	    layer.on("mouseout", that.handleMouseOut);
 	    layer.on("mousemove", that.handleMouseMove);
-	    layer.on("click", that.handleMouseClick);
 	  }
 	
 	  createImage(thisOrb, orb) {
@@ -181,7 +183,7 @@
 	        this.stage.add(layer);
 	
 	        let img = new Image();
-	        img.onload = this.doLoad.bind(null, this, layer, img, this.orbs[row][orb]);
+	        img.onload = this.doLoad.bind(null, this, layer, img, this.orbs[row][orb], [row, orb]);
 	        img.src = this.orbs[row][orb].attrs.src;
 	
 	      }
@@ -206,7 +208,7 @@
 	    window.newY = e.target.attrs.y;
 	    console.log(window.currentOrb);
 	    // if (window.clicked) {
-	    //   window.currentOrb.hide();
+	      // window.currentOrb.hide();
 	    // } else {
 	    //   window.currentOrb.show();
 	    // }
@@ -218,14 +220,19 @@
 	    // window.currentOrb.draw();
 	    window.currentOrb.x(window.newX);
 	    window.currentOrb.y(window.newY);
-	    window.currentOrb.attrs.opacity = 1;
 	    window.currentOrb.parent.clear();
 	    window.currentOrb.parent.draw();
 	    window.currentOrb = undefined;
 	    for (let i = 0; i < 5; i++) {
 	      for (let j = 0; j < 6; j++) {
+	        window.orbs[`orb${i}${j}`].parent.clear();
 	        window.orbs[`orb${i}${j}`].draw();
 	      }
+	    }
+	
+	    while (this.findMatches()) {
+	      this.matchOrbs();
+	      this.dropOrbs();
 	    }
 	  }
 	
@@ -245,26 +252,53 @@
 	      let targOrbY = e.target.attrs.y;
 	      // This is the target orb that's being changed's value
 	      // We're storing this in targOrb
-	      // debugger
 	      e.target.x(window.newX);
 	      e.target.y(window.newY);
+	
 	      e.target.parent.clear();
-	      e.target.parent.add(e.target);
+	      // e.target.parent.add(e.target);
 	      e.target.parent.draw();
 	
-	      window.movedOrbs.push(e.target);
+	      // window.movedOrbs.push(e.target);
 	      // Here we have the previously set current orb's position becoming
 	      // the target orb's position
 	
 	      window.newX = targOrbX;
 	      window.newY = targOrbY;
 	
-	      if (window.movedOrbs.length > 0){
+	      let orbX1 = window.currentOrb.attrs.pos[0];
+	      let orbY1 = window.currentOrb.attrs.pos[1];
+	
+	      let orbX2 = e.target.attrs.pos[0];
+	      let orbY2 = e.target.attrs.pos[1];
+	
+	      debugger
+	
+	      [window.orbArray[orbX1][orbY1], window.orbArray[orbX2][orbY2]] = [
+	        window.orbArray[orbX2][orbY2], window.orbArray[orbX1][orbY1]
+	      ];
+	
+	      debugger
+	
+	      // if (window.movedOrbs.length > 0){
 	        // debugger
-	      }
+	      // }
 	      // Now that the move is made, we can set the newX and Y to be the
 	      // target orb's position once mouseup
 	    }
+	  }
+	
+	
+	  findMatches () {
+	
+	  }
+	
+	  matchOrbs () {
+	
+	  }
+	
+	  dropOrbs () {
+	
 	  }
 	}
 	
