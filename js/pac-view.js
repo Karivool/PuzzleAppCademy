@@ -222,12 +222,9 @@ class BoardView {
   findMatches () {
     let matches = [];
     matches = window.matchOrbs(matches);
-    if (matches.length > 0) {
-      matches = window.dropOrbs(matches);
-    }
     while (matches.length > 0) {
-      matches = window.matchOrbs(matches);
       matches = window.dropOrbs(matches);
+      matches = window.matchOrbs(matches);
     }
   }
 
@@ -281,6 +278,7 @@ class BoardView {
       options = checkMatch(orbs[x][y + 1], orbs, options, x, y + 1, match);
     }
     if (options.matched) {
+      orb.attrs.pos = [x, y];
       match[orb.attrs.orbId] = orb;
     }
     // console.log(`II: orbID: ${orb.attrs.orbId} recursion: ${options.recurs}`);
@@ -296,9 +294,18 @@ class BoardView {
 
   dropOrbs (matches) {
     console.log(matches.length);
-    for (var i = 0; i < matches.length; i++) {
-      console.log(matches[i].attrs.orbId);
+    for (let i = 0; i < matches.length; i++) {
+      let pos = matches[i].attrs.pos;
+      let attrs = matches[i].attrs;
+
+      window.orbArray[pos[0]][pos[1]] = "EMPTY";
+      window.orbs[attrs.orbId].parent.clear();
+      window.orbs[attrs.orbId].remove();
+      debugger
+
     }
+
+    return [];
   }
 }
 
