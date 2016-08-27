@@ -17,8 +17,13 @@ class BoardView {
     window.orbMove = new Audio('coin5.mp3');
     window.movedOrbs = [];
     window.clicked = false;
-    window.handleMouseMove = this.handleMouseMove;
     window.orbArray = this.orbs;
+    window.findMatches = this.findMatches;
+    window.matchOrbs = this.matchOrbs;
+    window.dropOrbs = this.dropOrbs;
+    window.checkMatch = this.checkMatch;
+    window.handleMouseDown = this.handleMouseDown;
+    window.handleMouseUp = this.handleMouseUp;
   }
 
   renderImages () {
@@ -71,7 +76,8 @@ class BoardView {
       let orbject = new Kinetic.Circle({
         x: (rowIdx + 0.5) * 100, y: (colIdx + 0.5) * 100,
         width: 100, height: 100, src: src,
-        fill: orbColor, draggable: true, orbId: `orb${colIdx}${rowIdx}`
+        fill: orbColor, color: orbType, draggable: true,
+        orbId: `orb${colIdx}${rowIdx}`, matched: false, matchId: 0
       });
       // orbject.on("mousedown", this.handleMouseDown);
       // orbject.on("mouseup", this.handleMouseUp);
@@ -82,13 +88,13 @@ class BoardView {
     }
   }
 
-  doLoad (that, layer, img, orb, pos) {
+  doLoad (that, layer, img, orb, pos, color) {
     Image = new Kinetic.Image({
       x: orb.attrs.x - 50, y: orb.attrs.y - 50,
       width: 100, height: 100,
       image: img, pos: pos,
-      draggable: true, orbId: orb.attrs.orbId,
-      matched: false, matchId: 0
+      color: color, orbId: orb.attrs.orbId,
+      draggable: true
     });
     layer.add(Image);
     layer.draw();
@@ -115,23 +121,17 @@ class BoardView {
         this.stage.add(layer);
 
         let img = new Image();
-        img.onload = this.doLoad.bind(null, this, layer, img, this.orbs[row][orb], [row, orb]);
+        img.onload = this.doLoad.bind(
+          null, this,
+          layer, img,
+          this.orbs[row][orb], [row, orb],
+          this.orbs[row][orb].attrs.color
+        );
         img.src = this.orbs[row][orb].attrs.src;
 
       }
     }
   }
-
-  hashOrbs(orbs) {
-    // let allOrbs = {};
-    // for (let row = 0; row < this.orbs.length; row++) {
-    //   for (let orb = 0; orb < this.orbs[row].length; orb++) {
-    //     allOrbs[`orb${row}${orb}`] = orbs[row][orb];
-    //   }
-    // }
-    // return allOrbs;
-  }
-
 
   handleMouseDown (e) {
     // window.clicked = !window.clicked;
@@ -147,24 +147,24 @@ class BoardView {
     window.currentOrb.draw();
   }
 
-  handleMouseUp (e) {
+  handleMouseUp (e, redoing) {
     // window.currentOrb.show();
     // window.currentOrb.draw();
     window.currentOrb.x(window.newX);
     window.currentOrb.y(window.newY);
     window.currentOrb.parent.clear();
-    window.currentOrb.parent.draw();
-    window.currentOrb = undefined;
-    for (let i = 0; i < 5; i++) {
-      for (let j = 0; j < 6; j++) {
-        window.orbs[`orb${i}${j}`].parent.clear();
-        window.orbs[`orb${i}${j}`].draw();
-      }
-    }
+    window.currentOrb.parent.drawScene();
+    if (redoing) {
 
-    while (this.findMatches()) {
-      this.matchOrbs();
-      this.dropOrbs();
+    } else {
+      window.currentOrb = undefined;
+      for (let i = 0; i < 5; i++) {
+        for (let j = 0; j < 6; j++) {
+          window.orbs[`orb${i}${j}`].parent.clear();
+          window.orbs[`orb${i}${j}`].draw();
+        }
+      }
+      window.findMatches();
     }
   }
 
@@ -172,8 +172,7 @@ class BoardView {
   }
 
   handleMouseMove (e) {
-    console.log(e.target.attrs.orbId);
-
+    console.log(e.target.attrs.color);
 
     if (window.currentOrb !== undefined && (window.currentOrb.attrs.orbId !== e.target.attrs.orbId)) {
       window.orbMove.pause();
@@ -197,20 +196,19 @@ class BoardView {
 
       window.newX = targOrbX;
       window.newY = targOrbY;
+      window.handleMouseUp(e, true);
 
-      let orbX1 = window.currentOrb.attrs.pos[0];
-      let orbY1 = window.currentOrb.attrs.pos[1];
+      let x1 = window.currentOrb.attrs.pos[0];
+      let y1 = window.currentOrb.attrs.pos[1];
 
-      let orbX2 = e.target.attrs.pos[0];
-      let orbY2 = e.target.attrs.pos[1];
+      let x2 = e.target.attrs.pos[0];
+      let y2 = e.target.attrs.pos[1];
 
-      debugger
+      [window.orbArray[x1][y1], window.orbArray[x2][y2]] =
+      [window.orbArray[x2][y2], window.orbArray[x1][y1]];
 
-      [window.orbArray[orbX1][orbY1], window.orbArray[orbX2][orbY2]] = [
-        window.orbArray[orbX2][orbY2], window.orbArray[orbX1][orbY1]
-      ];
-
-      debugger
+      window.currentOrb.attrs.pos[0] = x2;
+      window.currentOrb.attrs.pos[1] = y2;
 
       // if (window.movedOrbs.length > 0){
         // debugger
@@ -222,11 +220,53 @@ class BoardView {
 
 
   findMatches () {
-
+    let matches = [];
+    matches = window.matchOrbs(matches);
+    while (matches.length > 0) {
+      matches = window.matchOrbs(matches);
+      matches = window.dropOrbs(matches);
+    }
   }
 
-  matchOrbs () {
+  matchOrbs (matches) {
+    let orb = window.orbArray;
+    let options;
 
+    for (let row = 0; row < 1; row++) {
+      for (let col = 0; col < 4; col++) {
+        options = { recurs: 0, matched: false, match_id: 0 };
+        options = window.checkMatch(orb[row][col], orb, options, row, col);
+      }
+    }
+    // for (let col = 0; col < 6; col++) {
+    //   for (let row = 0; row < 3; row++) {
+    //     let options = { recurs: 0, matched: false, match_id: 0 };
+    //     options = window.checkMatch(orb[col][row], orb, options, col, row);
+    //   }
+    // }
+    debugger
+    return matches;
+  }
+
+  checkMatch (orb, orbs, options, x, y, match = {}) {
+    options.recurs += 1;
+    if (orbs[x][y + 1] !== undefined && orb.attrs.color === orbs[x][y + 1].attrs.color) {
+      if (options.recurs >= 2) {
+        options.matched = true;
+        orbs[x][y].attrs.matched = true;
+      }
+      console.log("LOL WTF!");
+      options = checkMatch(orbs[x][y + 1], orbs, options, x, y + 1, match);
+    }
+    if (options.matched) {
+      match[orb.attrs.orbId] = orb;
+      debugger
+    }
+    console.log(`II: orbID: ${orb.attrs.orbId} recursion: ${options.recurs}`);
+    if (options.match === undefined) {
+      options.match = match;
+    }
+    return options;
   }
 
   dropOrbs () {
