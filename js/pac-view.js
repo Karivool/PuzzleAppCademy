@@ -138,7 +138,7 @@ class BoardView {
     window.currentOrb = e.target;
     window.newX = e.target.attrs.x;
     window.newY = e.target.attrs.y;
-    console.log(window.currentOrb);
+    // console.log(window.currentOrb);
     // if (window.clicked) {
       // window.currentOrb.hide();
     // } else {
@@ -172,7 +172,7 @@ class BoardView {
   }
 
   handleMouseMove (e) {
-    console.log(e.target.attrs.color);
+    console.log(e.target.attrs.orbId);
 
     if (window.currentOrb !== undefined && (window.currentOrb.attrs.orbId !== e.target.attrs.orbId)) {
       window.orbMove.pause();
@@ -222,6 +222,9 @@ class BoardView {
   findMatches () {
     let matches = [];
     matches = window.matchOrbs(matches);
+    if (matches.length > 0) {
+      matches = window.dropOrbs(matches);
+    }
     while (matches.length > 0) {
       matches = window.matchOrbs(matches);
       matches = window.dropOrbs(matches);
@@ -230,47 +233,72 @@ class BoardView {
 
   matchOrbs (matches) {
     let orb = window.orbArray;
-    let options;
+    let options = {};
+    let matchId = 0;
 
-    for (let row = 0; row < 1; row++) {
+    let allMatches = {};
+
+    for (let row = 0; row < 5; row++) {
       for (let col = 0; col < 4; col++) {
-        options = { recurs: 0, matched: false, match_id: 0 };
+        options.recurs = 0;
+        options.matched = false;
+        options.matchId = matchId;
         options = window.checkMatch(orb[row][col], orb, options, row, col);
+        // implement match order when time allows
+        for (let match in options.match) {
+          allMatches[match] = options.match[match];
+        }
       }
     }
-    // for (let col = 0; col < 6; col++) {
+    // for (let col = 0; col < 5; col++) {
     //   for (let row = 0; row < 3; row++) {
-    //     let options = { recurs: 0, matched: false, match_id: 0 };
-    //     options = window.checkMatch(orb[col][row], orb, options, col, row);
+    //     options.recurs = 0;
+    //     options.matched = false;
+    //     options.matchId = matchId;
+    //
+    //     options = window.checkMatch(orb[row][col], orb, options, col, row);
+    //     // console.log(options.match);
+    //     for (let match in options.match) {
+    //       allMatches[match] = options.match[match];
+    //     }
     //   }
     // }
-    debugger
+
+    for (let match in allMatches) {
+      matches.push(allMatches[match]);
+    }
     return matches;
   }
 
   checkMatch (orb, orbs, options, x, y, match = {}) {
     options.recurs += 1;
+
     if (orbs[x][y + 1] !== undefined && orb.attrs.color === orbs[x][y + 1].attrs.color) {
       if (options.recurs >= 2) {
         options.matched = true;
         orbs[x][y].attrs.matched = true;
       }
-      console.log("LOL WTF!");
       options = checkMatch(orbs[x][y + 1], orbs, options, x, y + 1, match);
     }
     if (options.matched) {
       match[orb.attrs.orbId] = orb;
-      debugger
     }
-    console.log(`II: orbID: ${orb.attrs.orbId} recursion: ${options.recurs}`);
+    // console.log(`II: orbID: ${orb.attrs.orbId} recursion: ${options.recurs}`);
     if (options.match === undefined) {
       options.match = match;
+    } else {
+      for (let orb in match) {
+        options.match[orb] = match[orb];
+      }
     }
     return options;
   }
 
-  dropOrbs () {
-
+  dropOrbs (matches) {
+    console.log(matches.length);
+    for (var i = 0; i < matches.length; i++) {
+      console.log(matches[i].attrs.orbId);
+    }
   }
 }
 
