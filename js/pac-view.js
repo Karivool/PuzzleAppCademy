@@ -14,7 +14,7 @@ class BoardView {
     window.orbs = this.orbCanvases;
     this.renderImages();
     window.stage = this.stage;
-    window.orbMove = new Audio('coin5.mp3');
+    window.orbMove = new Audio('orb_move.mp3');
     window.movedOrbs = [];
     window.clicked = false;
     window.orbArray = this.orbs;
@@ -94,14 +94,14 @@ class BoardView {
       width: 100, height: 100,
       image: img, pos: pos,
       color: color, orbId: orb.attrs.orbId,
-      draggable: true
+      draggable: false, opacity: 1
     });
     layer.add(Image);
     layer.draw();
 
     that.orbCanvases[Image.attrs.orbId] = Image;
 
-    layer.on("mousedown", that.handleMouseDown);
+    // layer.on("mousedown", that.handleMouseDown);
     layer.on("mouseup", that.handleMouseUp);
     layer.on("mouseout", that.handleMouseOut);
     layer.on("mousemove", that.handleMouseMove);
@@ -134,38 +134,70 @@ class BoardView {
   }
 
   handleMouseDown (e) {
-    // window.clicked = !window.clicked;
-    window.currentOrb = e.target;
-    window.newX = e.target.attrs.x;
-    window.newY = e.target.attrs.y;
-    // console.log(window.currentOrb);
-    // if (window.clicked) {
-      // window.currentOrb.hide();
-    // } else {
-    //   window.currentOrb.show();
-    // }
-    window.currentOrb.draw();
+    // // window.clicked = !window.clicked;
+    // window.currentOrb = e.target;
+    // window.currentOrb.attrs.opacity = 0.5;
+    //
+    // window.newX = e.target.attrs.x;
+    // window.newY = e.target.attrs.y;
+    //
+    // e.target.parent.clear();
+    // e.target.draw();
+    // // console.log(window.currentOrb);
+    // // if (window.clicked) {
+    //   // window.currentOrb.hide();
+    // // } else {
+    // //   window.currentOrb.show();
+    // // }
+    // window.currentOrb.draw();
   }
 
   handleMouseUp (e, redoing) {
-    // window.currentOrb.show();
-    // window.currentOrb.draw();
-    window.currentOrb.x(window.newX);
-    window.currentOrb.y(window.newY);
-    window.currentOrb.parent.clear();
-    window.currentOrb.parent.drawScene();
-    if (redoing) {
+    window.clicked = !window.clicked;
 
-    } else {
-      window.currentOrb = undefined;
-      for (let i = 0; i < 5; i++) {
-        for (let j = 0; j < 6; j++) {
-          window.orbs[`orb${i}${j}`].parent.clear();
-          window.orbs[`orb${i}${j}`].draw();
-        }
-      }
+    window.currentOrb = e.target;
+    window.currentOrb.attrs.radius = 60;
+
+    window.newX = e.target.attrs.x;
+    window.newY = e.target.attrs.y;
+
+    e.target.parent.clear();
+    e.target.draw();
+
+    window.currentOrb.draw();
+
+    let glow = new Kinetic.Circle({
+      x: (50) * 300,
+      y: (e.target.attrs.y) * 300,
+      width: 100, height: 100,
+      fill: "gold", color: "gold",
+      draggable: false,
+    });
+
+    e.target.parent.add(glow);
+    e.target.parent.clear();
+    e.target.parent.draw();
+
+    if (!window.clicked) {
       window.findMatches();
     }
+    // window.currentOrb.show();
+    // window.currentOrb.draw();
+    // window.currentOrb.x(window.newX);
+    // window.currentOrb.y(window.newY);
+    // window.currentOrb.parent.clear();
+    // window.currentOrb.parent.drawScene();
+    // if (redoing) {
+    //
+    // } else {
+    //   window.currentOrb = undefined;
+    //   for (let i = 0; i < 5; i++) {
+    //     for (let j = 0; j < 6; j++) {
+    //       window.orbs[`orb${i}${j}`].parent.clear();
+    //       window.orbs[`orb${i}${j}`].draw();
+    //     }
+    //   }
+    // }
   }
 
   handleMouseOut (e) {
@@ -174,9 +206,10 @@ class BoardView {
   handleMouseMove (e) {
     console.log(e.target.attrs.orbId);
 
-    if (window.currentOrb !== undefined && (window.currentOrb.attrs.orbId !== e.target.attrs.orbId)) {
-      window.orbMove.pause();
-      window.currentTime = 0;
+    if (window.currentOrb !== undefined && (window.currentOrb.attrs.orbId !== e.target.attrs.orbId) && window.clicked) {
+      // window.orbMove.pause();
+
+      window.orbMove.currentTime = 0;
       window.orbMove.play();
 
       let targOrbX = e.target.attrs.x;
@@ -186,17 +219,11 @@ class BoardView {
       e.target.x(window.newX);
       e.target.y(window.newY);
 
-      e.target.parent.clear();
-      // e.target.parent.add(e.target);
-      e.target.parent.draw();
-
-      // window.movedOrbs.push(e.target);
       // Here we have the previously set current orb's position becoming
       // the target orb's position
 
       window.newX = targOrbX;
       window.newY = targOrbY;
-      window.handleMouseUp(e, true);
 
       let x1 = window.currentOrb.attrs.pos[0];
       let y1 = window.currentOrb.attrs.pos[1];
@@ -209,6 +236,16 @@ class BoardView {
 
       window.currentOrb.attrs.pos[0] = x2;
       window.currentOrb.attrs.pos[1] = y2;
+
+      window.currentOrb.x(window.newX);
+      window.currentOrb.y(window.newY);
+
+      e.target.parent.clear();
+      window.currentOrb.parent.clear();
+
+      e.target.parent.draw();
+      window.currentOrb.draw();
+
 
       // if (window.movedOrbs.length > 0){
         // debugger
@@ -300,7 +337,7 @@ class BoardView {
 
       window.orbArray[pos[0]][pos[1]] = "EMPTY";
       window.orbs[attrs.orbId].parent.clear();
-      window.orbs[attrs.orbId].remove();
+
       debugger
 
     }
