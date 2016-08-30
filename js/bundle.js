@@ -109,7 +109,7 @@
 	  }
 	
 	  playMusic() {
-	    const songs = ['./mp3/999.mp3', './mp3/cmagic.mp3', './mp3/crypt43.mp3', './mp3/cryptconga.mp3', './mp3/descent.mp3', './mp3/devils.mp3', './mp3/evilem.mp3', './mp3/evilev.mp3', './mp3/hallow.mp3', './mp3/heatup.mp3', './mp3/hexagon.mp3', './mp3/shinra.mp3', './mp3/smb3d.mp3', './mp3/smb3l.mp3', './mp3/unepiccast.mp3', './mp3/unepicgard.mp3'];
+	    const songs = ['./mp3/999.mp3', './mp3/crypt43.mp3', './mp3/cryptconga.mp3', './mp3/descent.mp3', './mp3/devils.mp3', './mp3/evilem.mp3', './mp3/evilev.mp3', './mp3/hallow.mp3', './mp3/hexagon.mp3', './mp3/shinra.mp3', './mp3/unepiccast.mp3'];
 	
 	    let songNumber = Math.round(Math.random() * songs.length - 1);
 	    let song = new Audio(songs[songNumber]);
