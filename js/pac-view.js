@@ -3,9 +3,8 @@ const OrbObject = require('./orb_object.js');
 // 356 356 35697 45752 1241
 
 class BoardView {
-  constructor(stage, gameBoard, ctx) {
+  constructor(stage, ctx) {
     this.stage = stage;
-    this.gameBoard = gameBoard;
     this.ctx = ctx;
     this.orbs = [[], [], [], [], []];
     this.orbCanvases = {};
@@ -22,8 +21,9 @@ class BoardView {
     window.matchOrbs = this.matchOrbs;
     window.dropOrbs = this.dropOrbs;
     window.checkMatch = this.checkMatch;
-    window.handleMouseDown = this.handleMouseDown;
     window.handleMouseUp = this.handleMouseUp;
+
+    this.playMusic();
   }
 
   renderImages () {
@@ -40,6 +40,19 @@ class BoardView {
       this.addRow(colIdx);
     }
     this.renderBoard();
+  }
+
+  playMusic() {
+    const songs = ['./mp3/999.mp3', './mp3/cmagic.mp3', './mp3/crypt43.mp3', './mp3/cryptconga.mp3', './mp3/descent.mp3', './mp3/devils.mp3', './mp3/evilem.mp3', './mp3/evilev.mp3', './mp3/hallow.mp3', './mp3/heatup.mp3', './mp3/hexagon.mp3', './mp3/shinra.mp3', './mp3/smb3d.mp3', './mp3/smb3l.mp3', './mp3/unepiccast.mp3', './mp3/unepicgard.mp3'];
+
+    let songNumber = Math.round(Math.random() * songs.length - 1);
+    let song = new Audio(songs[songNumber]);
+
+    song.addEventListener('ended', function() {
+      this.currentTime = 0;
+      this.play();
+      }, false);
+    song.play();
   }
 
   addRow (colIdx) {
@@ -79,10 +92,6 @@ class BoardView {
         fill: orbColor, color: orbType, draggable: true,
         orbId: `orb${colIdx}${rowIdx}`, matched: false, matchId: 0
       });
-      // orbject.on("mousedown", this.handleMouseDown);
-      // orbject.on("mouseup", this.handleMouseUp);
-      // orbject.on("mouseout", this.handleMouseOut);
-      // orbject.on("mousemove", this.handleMouseMove);
 
       this.orbs[colIdx].push(orbject);
     }
@@ -134,29 +143,20 @@ class BoardView {
   }
 
   handleMouseDown (e) {
-    // // window.clicked = !window.clicked;
-    // window.currentOrb = e.target;
-    // window.currentOrb.attrs.opacity = 0.5;
-    //
-    // window.newX = e.target.attrs.x;
-    // window.newY = e.target.attrs.y;
-    //
-    // e.target.parent.clear();
-    // e.target.draw();
-    // // console.log(window.currentOrb);
-    // // if (window.clicked) {
-    //   // window.currentOrb.hide();
-    // // } else {
-    // //   window.currentOrb.show();
-    // // }
-    // window.currentOrb.draw();
   }
 
   handleMouseUp (e, redoing) {
+
     window.clicked = !window.clicked;
 
     window.currentOrb = e.target;
-    window.currentOrb.attrs.radius = 60;
+    if (window.clicked) {
+      window.currentOrb.setOpacity(0.5);
+      window.currentOrb.setSize({width: 105, height: 105});
+    } else {
+      window.currentOrb.setOpacity(1);
+      window.currentOrb.setSize({width: 100, height: 100});
+    }
 
     window.newX = e.target.attrs.x;
     window.newY = e.target.attrs.y;
@@ -166,27 +166,35 @@ class BoardView {
 
     window.currentOrb.draw();
 
-    let glow = new Kinetic.Circle({
-      x: (50) * 300,
-      y: (e.target.attrs.y) * 300,
-      width: 100, height: 100,
-      fill: "gold", color: "gold",
-      draggable: false,
-    });
-
-    e.target.parent.add(glow);
     e.target.parent.clear();
+    // e.target.parent.add(glow);
     e.target.parent.draw();
 
     if (!window.clicked) {
       window.findMatches();
+    } else {
+      for (let row = 0; row < 5; row++) {
+        for (let col = 0; col < 6; col++) {
+          let color = window.orbArray[row][col].attrs.color;
+          let sek;
+          if (color === 'orb-fire') {
+            sek = "#ff0000";
+          } else if (color === 'orb-water') {
+            sek = "#00ffe0";
+          } else if (color === 'orb-wood') {
+            sek = "#aeff00";
+          } else if (color === 'orb-light') {
+            sek = "#ffe400";
+          } else if (color === 'orb-dark') {
+            sek = "#8a00ff";
+          } else {
+            sek = "#ff00fc";
+          }
+          console.log(`${row}${col}%c(■)`, `background: #222; color: ${sek}`);
+        }
+        console.log("___");
+      }
     }
-    // window.currentOrb.show();
-    // window.currentOrb.draw();
-    // window.currentOrb.x(window.newX);
-    // window.currentOrb.y(window.newY);
-    // window.currentOrb.parent.clear();
-    // window.currentOrb.parent.drawScene();
     // if (redoing) {
     //
     // } else {
@@ -204,7 +212,7 @@ class BoardView {
   }
 
   handleMouseMove (e) {
-    console.log(e.target.attrs.orbId);
+    // console.log(e.target.attrs.orbId);
 
     if (window.currentOrb !== undefined && (window.currentOrb.attrs.orbId !== e.target.attrs.orbId) && window.clicked) {
       // window.orbMove.pause();
@@ -261,7 +269,7 @@ class BoardView {
     matches = window.matchOrbs(matches);
     while (matches.length > 0) {
       matches = window.dropOrbs(matches);
-      matches = window.matchOrbs(matches);
+      // matches = window.matchOrbs(matches);
     }
   }
 
@@ -271,6 +279,28 @@ class BoardView {
     let matchId = 0;
 
     let allMatches = {};
+
+    for (let row = 0; row < 5; row++) {
+      for (let col = 0; col < 6; col++) {
+        let color = window.orbArray[row][col].attrs.color;
+        let sek;
+        if (color === 'orb-fire') {
+          sek = "#ff0000";
+        } else if (color === 'orb-water') {
+          sek = "#00ffe0";
+        } else if (color === 'orb-wood') {
+          sek = "#aeff00";
+        } else if (color === 'orb-light') {
+          sek = "#ffe400";
+        } else if (color === 'orb-dark') {
+          sek = "#8a00ff";
+        } else {
+          sek = "#ff00fc";
+        }
+        console.log(`${row}${col}%c(■)`, `background: #222; color: ${sek}`);
+      }
+      console.log("___");
+    }
 
     for (let row = 0; row < 5; row++) {
       for (let col = 0; col < 4; col++) {
@@ -337,8 +367,6 @@ class BoardView {
 
       window.orbArray[pos[0]][pos[1]] = "EMPTY";
       window.orbs[attrs.orbId].parent.clear();
-
-      debugger
 
     }
 

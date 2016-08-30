@@ -1,5 +1,4 @@
 const BoardView = require('./pac-view.js');
-const Game = require('./game.js');
 
 document.addEventListener("DOMContentLoaded",
 function() {
@@ -11,6 +10,5 @@ function() {
     width: 604,
     height: 524,
   });
-  const game = new Game();
-  const board = new BoardView(stage, game, ctx);
+  const board = new BoardView(stage, ctx);
 });
