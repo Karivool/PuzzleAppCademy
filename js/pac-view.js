@@ -8,32 +8,28 @@ class BoardView {
     this.ctx = ctx;
     this.orbs = [[], [], [], [], []];
     this.orbCanvases = {};
-    this.moving = false;
+
     this.setupBoard();
     window.orbs = this.orbCanvases;
-    this.renderImages();
+    // this.renderImages();
+
     window.stage = this.stage;
     window.orbMove = new Audio('orb_move.mp3');
     window.movedOrbs = [];
     window.clicked = false;
+
     window.orbArray = this.orbs;
     window.findMatches = this.findMatches;
     window.matchOrbs = this.matchOrbs;
     window.dropOrbs = this.dropOrbs;
     window.checkMatch = this.checkMatch;
-    window.handleMouseUp = this.handleMouseUp;
 
     this.playMusic();
   }
 
-  renderImages () {
-
-    this.orbData = this.orbData = [].concat.apply([], this.orbs);
-
-    for (let orb = 0; orb < this.orbData.length; orb++) {
-      this.createImage(this.orbData[orb], orb);
-    }
-  }
+  // renderImages () {
+  //   this.orbData = this.orbData = [].concat.apply([], this.orbs);
+  // }
 
   setupBoard () {
     for (let colIdx = 0; colIdx < 5; colIdx++) {
@@ -47,6 +43,7 @@ class BoardView {
 
     let songNumber = Math.round(Math.random() * songs.length - 1);
     let song = new Audio(songs[songNumber]);
+    song.volume = 0.5;
 
     song.addEventListener('ended', function() {
       this.currentTime = 0;
@@ -110,13 +107,9 @@ class BoardView {
 
     that.orbCanvases[Image.attrs.orbId] = Image;
 
-    // layer.on("mousedown", that.handleMouseDown);
     layer.on("mouseup", that.handleMouseUp);
     layer.on("mouseout", that.handleMouseOut);
     layer.on("mousemove", that.handleMouseMove);
-  }
-
-  createImage(thisOrb, orb) {
   }
 
   renderBoard () {
@@ -124,8 +117,6 @@ class BoardView {
     for (let row = 0; row < this.orbs.length; row++) {
       for (let orb = 0; orb < this.orbs[row].length; orb++) {
         let layer = new Kinetic.Layer();
-
-        // layer.add(this.orbs[row][orb]);
 
         this.stage.add(layer);
 
@@ -142,33 +133,28 @@ class BoardView {
     }
   }
 
-  handleMouseDown (e) {
-  }
-
   handleMouseUp (e, redoing) {
 
     window.clicked = !window.clicked;
 
-    window.currentOrb = e.target;
     if (window.clicked) {
+      window.currentOrb = e.target;
       window.currentOrb.setOpacity(0.5);
       window.currentOrb.setSize({width: 105, height: 105});
+
+      window.newX = e.target.attrs.x;
+      window.newY = e.target.attrs.y;
+
+      e.target.parent.clear();
+      e.target.parent.draw();
+
     } else {
       window.currentOrb.setOpacity(1);
       window.currentOrb.setSize({width: 100, height: 100});
+      window.currentOrb.parent.clear();
+      window.currentOrb.parent.draw();
+      window.currentOrb = undefined;
     }
-
-    window.newX = e.target.attrs.x;
-    window.newY = e.target.attrs.y;
-
-    e.target.parent.clear();
-    e.target.draw();
-
-    window.currentOrb.draw();
-
-    e.target.parent.clear();
-    // e.target.parent.add(glow);
-    e.target.parent.draw();
 
     if (!window.clicked) {
       window.findMatches();
@@ -195,27 +181,15 @@ class BoardView {
         console.log("___");
       }
     }
-    // if (redoing) {
-    //
-    // } else {
-    //   window.currentOrb = undefined;
-    //   for (let i = 0; i < 5; i++) {
-    //     for (let j = 0; j < 6; j++) {
-    //       window.orbs[`orb${i}${j}`].parent.clear();
-    //       window.orbs[`orb${i}${j}`].draw();
-    //     }
-    //   }
-    // }
   }
 
   handleMouseOut (e) {
   }
 
   handleMouseMove (e) {
-    // console.log(e.target.attrs.orbId);
+    console.log(e.target.attrs.orbId);
 
     if (window.currentOrb !== undefined && (window.currentOrb.attrs.orbId !== e.target.attrs.orbId) && window.clicked) {
-      // window.orbMove.pause();
 
       window.orbMove.currentTime = 0;
       window.orbMove.play();
@@ -245,6 +219,9 @@ class BoardView {
       window.currentOrb.attrs.pos[0] = x2;
       window.currentOrb.attrs.pos[1] = y2;
 
+      e.target.attrs.pos[0] = x1;
+      e.target.attrs.pos[1] = y1;
+
       window.currentOrb.x(window.newX);
       window.currentOrb.y(window.newY);
 
@@ -254,12 +231,6 @@ class BoardView {
       e.target.parent.draw();
       window.currentOrb.draw();
 
-
-      // if (window.movedOrbs.length > 0){
-        // debugger
-      // }
-      // Now that the move is made, we can set the newX and Y to be the
-      // target orb's position once mouseup
     }
   }
 
