@@ -233,7 +233,7 @@
 	    }
 	  }
 	
-	  handleMouseUp (e, redoing) {
+	  handleMouseUp (e) {
 	
 	    window.clicked = !window.clicked;
 	    if (window.clicked) {
@@ -257,7 +257,7 @@
 	    }
 	
 	    if (!window.clicked) {
-	      window.findMatches();
+	      let matches = window.findMatches();
 	    } else {
 	      for (let row = 0; row < 5; row++) {
 	        for (let col = 0; col < 6; col++) {
@@ -346,8 +346,8 @@
 	    matches = window.matchOrbs(matches);
 	    while (matches.length > 0) {
 	      matches = window.dropOrbs(matches);
-	      // matches = window.matchOrbs(matches);
 	    }
+	    return window.matchOrbs(matches);
 	  }
 	
 	  matchOrbs (matches) {
@@ -504,10 +504,6 @@
 	  }
 	
 	  reLoad (orb, img, layer, pos, atts) {
-	    console.log(atts.x - 50);
-	    console.log(atts.y - 50);
-	    console.log(orb.attrs.orbId);
-	
 	    let reImage = new Kinetic.Image({
 	      x: atts.x - 50, y: atts.y - 50,
 	      width: 100, height: 100,
@@ -522,8 +518,12 @@
 	      layer.draw();
 	      window.orbs[reImage.attrs.orbId] = reImage;
 	
-	      let sound = new Audio('./superlaser.mp3');
-	      sound.volume = 0.3;
+	      const sounds = ['./superlaser2.mp3', './superlaser3.mp3', './superlaser4.mp3', './superlaser5.mp3', './superlaser7.mp3', './superlaser8.mp3', './superlaser9.mp3', './superlaser11.mp3', './superlaser12.mp3'];
+	
+	      let soundNumber = Math.round(Math.random() * sounds.length - 1);
+	      let sound = new Audio(sounds[soundNumber]);
+	
+	      sound.volume = 0.25;
 	      sound.currentTime = 0;
 	      sound.play();
 	    });
