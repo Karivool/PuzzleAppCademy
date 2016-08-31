@@ -27,6 +27,7 @@ class BoardView {
     window.randomOrb = this.randomOrb;
 
     window.reLoad = this.reLoad;
+    window.sleep = this.sleep;
 
     this.playMusic();
   }
@@ -410,7 +411,12 @@ class BoardView {
       let imgVars = { color: attrs.color, height: attrs.height,
                       opacity: attrs.opacity, orbId: attrs.orbId,
                       pos: attrs.pos, width: attrs.width,
-                      x: orbArray[pos[0]][pos[1]].attrs.x, y: orbArray[pos[0]][pos[1]].attrs.y };
+                      x: orbArray[pos[0]][pos[1]].attrs.x, y: orbArray[pos[0]][pos[1]].attrs.y
+                    };
+
+      matches[i].attrs.color = orbVals.orbType;
+      matches[i].attrs.src = orbVals.src;
+      matches[i].attrs.orbColor = orbVals.orbColor;
 
       let img = new Image();
 
@@ -444,14 +450,21 @@ class BoardView {
       draggable: false, opacity: atts.opacity
     });
     layer.removeChildren();
-    layer.add(reImage);
-    layer.draw();
-    window.orbs[reImage.attrs.orbId] = reImage;
+    layer.clear();
+    window.sleep(150).then(() => {
+      layer.add(reImage);
+      layer.draw();
+      window.orbs[reImage.attrs.orbId] = reImage;
 
-    let sound = new Audio('./superlaser.mp3');
-    sound.volume = 0.3;
-    sound.currentTime = 0;
-    sound.play();
+      let sound = new Audio('./superlaser.mp3');
+      sound.volume = 0.3;
+      sound.currentTime = 0;
+      sound.play();
+    });
+  }
+
+  sleep (time) {
+    return new Promise((resolve) => setTimeout(resolve, time));
   }
 }
 
