@@ -90,13 +90,12 @@
 	    window.dropOrbs = this.dropOrbs;
 	    window.checkMatch = this.checkMatch;
 	    window.checkMatchVert = this.checkMatchVert;
+	    window.randomOrb = this.randomOrb;
+	
+	    window.reLoad = this.reLoad;
 	
 	    this.playMusic();
 	  }
-	
-	  // renderImages () {
-	  //   this.orbData = this.orbData = [].concat.apply([], this.orbs);
-	  // }
 	
 	  setupBoard () {
 	    for (let colIdx = 0; colIdx < 5; colIdx++) {
@@ -152,8 +151,7 @@
 	      }
 	      let orbject = new Kinetic.Circle({
 	        x: (rowIdx + 0.5) * 100, y: (colIdx + 0.5) * 100,
-	        width: 100, height: 100, src: src,
-	        fill: orbColor, color: orbType, draggable: true,
+	        src: src, fill: orbColor, color: orbType,
 	        orbId: `orb${colIdx}${rowIdx}`, matched: false, matchId: 0
 	      });
 	
@@ -162,21 +160,55 @@
 	  }
 	
 	  doLoad (that, layer, img, orb, pos, color) {
-	    Image = new Kinetic.Image({
+	    let orbImage = new Kinetic.Image({
 	      x: orb.attrs.x - 50, y: orb.attrs.y - 50,
 	      width: 100, height: 100,
 	      image: img, pos: pos,
 	      color: color, orbId: orb.attrs.orbId,
 	      draggable: false, opacity: 1
 	    });
-	    layer.add(Image);
+	    layer.add(orbImage);
 	    layer.draw();
 	
-	    that.orbCanvases[Image.attrs.orbId] = Image;
+	    that.orbCanvases[orbImage.attrs.orbId] = orbImage;
 	
 	    layer.on("mouseup", that.handleMouseUp);
 	    layer.on("mouseout", that.handleMouseOut);
 	    layer.on("mousemove", that.handleMouseMove);
+	  }
+	
+	  randomOrb () {
+	    let orbType = Math.round(Math.random() * 5);
+	    let src;
+	    let orbColor;
+	
+	    if (orbType === 0) {
+	        orbType = "orb-fire";
+	        src = "./img/fire-pin.png";
+	        orbColor = "#990000";
+	      } else if (orbType === 1) {
+	        orbType = "orb-water";
+	        src = "./img/water-pin.png";
+	        orbColor = "#112288";
+	      } else if (orbType === 2) {
+	        orbType = "orb-wood";
+	        src = "./img/wood-pin.png";
+	        orbColor = "#005544";
+	      } else if (orbType === 3) {
+	        orbType = "orb-light";
+	        src = "./img/light-pin.png";
+	        orbColor = "#776611";
+	      } else if (orbType === 4) {
+	        orbType = "orb-dark";
+	        src = "./img/dark-pin.png";
+	        orbColor = "#772299";
+	      } else {
+	        orbType = "orb-heart";
+	        src = "./img/heart-pin.png";
+	        orbColor = "#dd2277";
+	    }
+	
+	    return {orbType, src, orbColor};
 	  }
 	
 	  renderBoard () {
@@ -205,7 +237,7 @@
 	    window.clicked = !window.clicked;
 	    if (window.clicked) {
 	      window.currentOrb = e.target;
-	      window.currentOrb.setOpacity(0.5);
+	      window.currentOrb.setOpacity(0.2);
 	      window.currentOrb.setSize({width: 105, height: 105});
 	      // debugger
 	
@@ -279,6 +311,12 @@
 	
 	      let x2 = e.target.attrs.pos[0];
 	      let y2 = e.target.attrs.pos[1];
+	
+	      let orb1 = window.orbArray[x1][y1];
+	      let orb2 = window.orbArray[x2][y2];
+	
+	      [orb1.attrs.x, orb2.attrs.x] = [orb2.attrs.x, orb1.attrs.x];
+	      [orb1.attrs.y, orb2.attrs.y] = [orb2.attrs.y, orb1.attrs.y];
 	
 	      [window.orbArray[x1][y1], window.orbArray[x2][y2]] =
 	      [window.orbArray[x2][y2], window.orbArray[x1][y1]];
@@ -362,7 +400,6 @@
 	        // console.log(`checking ${row} ${col}`);
 	
 	        options = window.checkMatchVert(orb[row][col], orb, options, row, col);
-	        console.log(options.match);
 	        for (let match in options.match) {
 	          allMatches[match] = options.match[match];
 	        }
@@ -386,11 +423,10 @@
 	      options = checkMatchVert(orbs[x + 1][y], orbs, options, x + 1, y, match);
 	    }
 	    if (options.matched) {
-	      console.log('I: HELLO');
 	      orb.attrs.pos = [x, y];
 	      match[orb.attrs.orbId] = orb;
 	    }
-	    console.log(`II: orbID: ${orb.attrs.orbId} recursion: ${options.recurs}`);
+	    // console.log(`II: orbID: ${orb.attrs.orbId} recursion: ${options.recurs}`);
 	
 	    if (options.match === undefined) {
 	      options.match = match;
@@ -427,18 +463,56 @@
 	  }
 	
 	  dropOrbs (matches) {
-	    console.log(matches.length);
+	    console.log(matches);
 	    for (let i = 0; i < matches.length; i++) {
 	      let pos = matches[i].attrs.pos;
 	      let attrs = matches[i].attrs;
 	
-	      window.orbArray[pos[0]][pos[1]].attrs.color = "orb-matched";
-	      // window.orbArray[pos[0]][pos[1]].setImage;
+	      // window.orbArray[pos[0]][pos[1]].attrs.color = "orb-matched";
+	      // window.orbArray[pos[0]][pos[1]].attrs.src = "./img/match-pin.png";
 	
-	      window.orbs[attrs.orbId].parent.clear();
+	      let orbVals = window.randomOrb();
+	
+	      let imgVars = { color: attrs.color, height: attrs.height,
+	                      opacity: attrs.opacity, orbId: attrs.orbId,
+	                      pos: attrs.pos, width: attrs.width,
+	                      x: orbArray[pos[0]][pos[1]].attrs.x, y: orbArray[pos[0]][pos[1]].attrs.y };
+	
+	      let img = new Image();
+	
+	      img.onload = window.reLoad.bind(
+	        null,
+	        matches[i], img,
+	        window.orbs[matches[i].attrs.orbId].parent,
+	        [pos[0], pos[1]],
+	        imgVars
+	      );
+	      img.src = orbVals.src;
+	
 	    }
+	    //window.orbs is the hash where the actual images must change
+	    //window.orbArray will let us iterate through them all
+	      // but orbArray's src should be changed too
 	
 	    return [];
+	  }
+	
+	  reLoad (orb, img, layer, pos, atts) {
+	    console.log(atts.x - 50);
+	    console.log(atts.y - 50);
+	    console.log(orb.attrs.orbId);
+	
+	    let reImage = new Kinetic.Image({
+	      x: atts.x - 50, y: atts.y - 50,
+	      width: 100, height: 100,
+	      image: img, pos: atts.pos,
+	      color: atts.color, orbId: atts.orbId,
+	      draggable: false, opacity: atts.opacity
+	    });
+	    layer.removeChildren();
+	    layer.add(reImage);
+	    layer.draw();
+	
 	  }
 	}
 	
