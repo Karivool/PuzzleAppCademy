@@ -446,7 +446,12 @@ class BoardView {
     layer.removeChildren();
     layer.add(reImage);
     layer.draw();
+    window.orbs[reImage.attrs.orbId] = reImage;
 
+    let sound = new Audio('./superlaser.mp3');
+    sound.volume = 0.3;
+    sound.currentTime = 0;
+    sound.play();
   }
 }
 
