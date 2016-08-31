@@ -25,7 +25,6 @@ class BoardView {
     window.checkMatch = this.checkMatch;
     window.checkMatchVert = this.checkMatchVert;
 
-
     this.playMusic();
   }
 
@@ -138,11 +137,11 @@ class BoardView {
   handleMouseUp (e, redoing) {
 
     window.clicked = !window.clicked;
-
     if (window.clicked) {
       window.currentOrb = e.target;
       window.currentOrb.setOpacity(0.5);
       window.currentOrb.setSize({width: 105, height: 105});
+      // debugger
 
       window.newX = e.target.attrs.x;
       window.newY = e.target.attrs.y;
@@ -313,7 +312,7 @@ class BoardView {
   checkMatchVert (orb, orbs, options, x, y, match = {}) {
     options.recurs += 1;
 
-    if (orbs[x + 1][y] !== undefined && orb.attrs.color === orbs[x + 1][y].attrs.color) {
+    if (orbs[x + 1] !== undefined && orb.attrs.color === orbs[x + 1][y].attrs.color) {
       if (options.recurs >= 2) {
         options.matched = true;
         orbs[x][y].attrs.matched = true;
@@ -367,9 +366,10 @@ class BoardView {
       let pos = matches[i].attrs.pos;
       let attrs = matches[i].attrs;
 
-      window.orbArray[pos[0]][pos[1]] = "EMPTY";
-      window.orbs[attrs.orbId].parent.clear();
+      window.orbArray[pos[0]][pos[1]].attrs.color = "orb-matched";
+      // window.orbArray[pos[0]][pos[1]].setImage;
 
+      window.orbs[attrs.orbId].parent.clear();
     }
 
     return [];
