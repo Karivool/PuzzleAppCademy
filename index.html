@@ -4,6 +4,8 @@
     <meta charset="utf-8">
     <link href="https://fonts.googleapis.com/css?family=Passion+One" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Roboto+Slab" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Arbutus" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Rubik+Mono+One" rel="stylesheet">
     <title>PuzzleAppCademy</title>
     <link rel="stylesheet" type="text/css" href="./css/main.css">
   </head>
@@ -32,14 +34,11 @@
           <p id="rule">∞ You have 2 minutes per round. Good luck!</p>
         </div>
         <div id="score-timer">
-          <p id="rule">Score:</p>
+          <p id="stat">Score:</p>
           <div id="score">
-            <script>
-
-            </script>
+            <span class="score"></span>
           </div>
-          <p>•</p>
-          <p id="rule">Time:</p>
+          <p id="stat">Time:</p>
           <div id="timer">
             <span class="seconds"></span>
           </div>
@@ -48,11 +47,14 @@
     </div>
     <script>
       window.onload = function () {
+        let timer = document.getElementById('timer');
+        let secondsSpan = timer.querySelector('.seconds');
+        secondsSpan.innerHTML = (120);
       }
       function beginGame() {
         if (!window.gameStarted) {
           window.gameStarted = true;
-          let countdown = 5;
+          let countdown = 121;
           gameStart('timer', countdown);
         }
       }
@@ -65,11 +67,9 @@
         function updateClock() {
           if (!window.gameEnd){
             countdown -= 1;
-            secondsSpan.innerHTML = (countdown)
-            console.log(countdown);
+            secondsSpan.innerHTML = (countdown);
             if (countdown <= 0) {
               window.gameEnd = true;
-              console.log(window.gameEnd === true);
             }
           }
         }
