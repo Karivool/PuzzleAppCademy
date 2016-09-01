@@ -42,6 +42,10 @@
           <div id="timer">
             <span class="seconds"></span>
           </div>
+          <div id="reset">
+            <a id="reset-butt" href="./index.html">Reset</a>
+            <!-- <button type="button" id="reset" onclick="resetGame()">Reset</button> -->
+          </div>
         </div>
       </div>
     </div>
@@ -78,6 +82,19 @@
           let timing = setInterval(updateClock, 1000);
         }
       }
+
+      function resetGame() {
+        let score = document.getElementById('score');
+        let scoreSpan = score.querySelector('.score');
+        scoreSpan.innerHTML = 0;
+
+        let timer = document.getElementById('timer');
+        let secondsSpan = timer.querySelector('.seconds');
+        secondsSpan.innerHTML = (120);
+
+        window.gameStarted = false;
+        window.gameEnd = false;
+      };
     </script>
   </body>
 </html>
