@@ -134,27 +134,27 @@
 	
 	      if (orbType === 0) {
 	          orbType = "orb-fire";
-	          src = "./img/fire-pin.png";
+	          src = "./img/fire.png";
 	          orbColor = "#990000";
 	        } else if (orbType === 1) {
 	          orbType = "orb-water";
-	          src = "./img/water-pin.png";
+	          src = "./img/water.png";
 	          orbColor = "#112288";
 	        } else if (orbType === 2) {
 	          orbType = "orb-wood";
-	          src = "./img/wood-pin.png";
+	          src = "./img/wood.png";
 	          orbColor = "#005544";
 	        } else if (orbType === 3) {
 	          orbType = "orb-light";
-	          src = "./img/light-pin.png";
+	          src = "./img/light.png";
 	          orbColor = "#776611";
 	        } else if (orbType === 4) {
 	          orbType = "orb-dark";
-	          src = "./img/dark-pin.png";
+	          src = "./img/dark.png";
 	          orbColor = "#772299";
 	        } else {
 	          orbType = "orb-heart";
-	          src = "./img/heart-pin.png";
+	          src = "./img/heart.png";
 	          orbColor = "#dd2277";
 	      }
 	      let orbject = new Kinetic.Circle({
@@ -192,27 +192,29 @@
 	
 	    if (orbType === 0) {
 	        orbType = "orb-fire";
-	        src = "./img/fire-pin.png";
+	        src = "./img/fire.png";
 	        orbColor = "#990000";
 	      } else if (orbType === 1) {
 	        orbType = "orb-water";
-	        src = "./img/water-pin.png";
+	        src = "./img/water.png";
 	        orbColor = "#112288";
 	      } else if (orbType === 2) {
 	        orbType = "orb-wood";
-	        src = "./img/wood-pin.png";
+	        src = "./img/wood.png";
+	        // src = "./img/julian.png";
 	        orbColor = "#005544";
 	      } else if (orbType === 3) {
 	        orbType = "orb-light";
-	        src = "./img/light-pin.png";
+	        src = "./img/light.png";
 	        orbColor = "#776611";
 	      } else if (orbType === 4) {
 	        orbType = "orb-dark";
-	        src = "./img/dark-pin.png";
+	        src = "./img/dark.png";
 	        orbColor = "#772299";
 	      } else {
 	        orbType = "orb-heart";
-	        src = "./img/heart-pin.png";
+	        src = "./img/heart.png";
+	        // src = "./img/tommy.png";
 	        orbColor = "#dd2277";
 	    }
 	
@@ -560,15 +562,15 @@
 	      } else if (baseScore > 6 && baseScore <= 10) {
 	        window.score += (baseScore + 3) * 2;
 	      } else if (baseScore > 10 && baseScore <= 16) {
-	        window.score += (baseScore + 5) * 4;
+	        window.score += (baseScore + 6) * 5;
 	      } else if (baseScore > 16 && baseScore <= 20) {
-	        window.score += (baseScore + 7) * 6;
+	        window.score += (baseScore + 9) * 7;
 	      } else if (baseScore > 20 && baseScore <= 24) {
-	        window.score += (baseScore + 10) * 8;
+	        window.score += (baseScore + 12) * 10;
 	      } else if (baseScore > 24 && baseScore <= 29) {
-	        window.score += (baseScore + 14) * 10;
+	        window.score += (baseScore + 15) * 13;
 	      } else {
-	        window.score += (baseScore + 19) * 12;
+	        window.score += (baseScore + 20) * 17;
 	      }
 	    }
 	    scoreSpan.innerHTML = (window.score);
