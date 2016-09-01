@@ -36,6 +36,27 @@ h2 {
   font-size: 20px;
 }
 
+#score {
+  font-family: 'Arbutus', cursive;
+  font-size: 30px;
+  color: yellowgreen;
+  padding-bottom: 10px;
+}
+
+.seconds {
+  font-family: 'Rubik Mono One', sans-serif;
+  font-size: 24px;
+  color: yellow;
+  padding-bottom: 10px;
+}
+
+#stat {
+  font-family: 'Roboto Slab', sans-serif;
+  font-style: italic;
+  color: whitesmoke;
+  font-size: 26px;
+}
+
 #game-sidebar{
   float: right;
   display: inline-flex;
@@ -43,7 +64,10 @@ h2 {
 }
 
 #instructions{
-  padding-bottom: 30px;
+  border: 10px dotted black;
+  color: white;
+  background: -webkit-linear-gradient(#832fd8, #1c176d);
+  padding-bottom: 50px;
 }
 
 #title {
@@ -64,7 +88,14 @@ h2 {
   color: #ff4c07;
 }
 
+#score-timer {
+  background: -webkit-linear-gradient(#394e1e, #575f11);
+  padding: 30px 0px;
+  border: 6px dashed black;
+}
+
 #game-board {
+  border: 10px solid black;
   float: left;
   margin-right: 20px;
   height: 504px;
