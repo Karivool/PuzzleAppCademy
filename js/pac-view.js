@@ -8,6 +8,7 @@ class BoardView {
     this.ctx = ctx;
     this.orbs = [[], [], [], [], []];
     this.orbCanvases = {};
+    this.score = 0;
 
     this.setupBoard();
     window.orbs = this.orbCanvases;
@@ -29,6 +30,10 @@ class BoardView {
     window.reLoad = this.reLoad;
     window.sleep = this.sleep;
 
+    window.gameEnd = false;
+    window.gameStarted = false;
+    window.score = this.score;
+
     this.playMusic();
   }
 
@@ -40,7 +45,7 @@ class BoardView {
   }
 
   playMusic() {
-    const songs = ['./mp3/999.mp3', './mp3/crypt43.mp3', './mp3/cryptconga.mp3', './mp3/descent.mp3', './mp3/devils.mp3', './mp3/evilem.mp3', './mp3/evilev.mp3', './mp3/hallow.mp3', './mp3/hexagon.mp3', './mp3/shinra.mp3', './mp3/unepiccast.mp3'];
+    const songs = ['./mp3/999.mp3', './mp3/crypt43.mp3', './mp3/cryptconga.mp3', './mp3/descent.mp3', './mp3/devils.mp3', './mp3/distrust.mp3', './mp3/evilem.mp3', './mp3/evilev.mp3', './mp3/hallow.mp3', './mp3/hexagon.mp3', './mp3/shinra.mp3', './mp3/unepiccast.mp3'];
 
     let songNumber = Math.round(Math.random() * songs.length - 1);
     let song = new Audio(songs[songNumber]);
@@ -168,51 +173,52 @@ class BoardView {
   }
 
   handleMouseUp (e) {
+    if(!window.gameEnd) {
+      window.clicked = !window.clicked;
+      if (window.clicked) {
+        window.currentOrb = e.target;
+        window.currentOrb.setOpacity(0.7);
+        window.currentOrb.setSize({width: 105, height: 105});
+        // debugger
 
-    window.clicked = !window.clicked;
-    if (window.clicked) {
-      window.currentOrb = e.target;
-      window.currentOrb.setOpacity(0.2);
-      window.currentOrb.setSize({width: 105, height: 105});
-      // debugger
+        window.newX = e.target.attrs.x;
+        window.newY = e.target.attrs.y;
 
-      window.newX = e.target.attrs.x;
-      window.newY = e.target.attrs.y;
+        e.target.parent.clear();
+        e.target.parent.draw();
 
-      e.target.parent.clear();
-      e.target.parent.draw();
+      } else {
+        window.currentOrb.setOpacity(1);
+        window.currentOrb.setSize({width: 100, height: 100});
+        window.currentOrb.parent.clear();
+        window.currentOrb.parent.draw();
+        window.currentOrb = undefined;
+      }
 
-    } else {
-      window.currentOrb.setOpacity(1);
-      window.currentOrb.setSize({width: 100, height: 100});
-      window.currentOrb.parent.clear();
-      window.currentOrb.parent.draw();
-      window.currentOrb = undefined;
-    }
-
-    if (!window.clicked) {
-      let matches = window.findMatches();
-    } else {
-      for (let row = 0; row < 5; row++) {
-        for (let col = 0; col < 6; col++) {
-          let color = window.orbArray[row][col].attrs.color;
-          let sek;
-          if (color === 'orb-fire') {
-            sek = "#ff0000";
-          } else if (color === 'orb-water') {
-            sek = "#00ffe0";
-          } else if (color === 'orb-wood') {
-            sek = "#aeff00";
-          } else if (color === 'orb-light') {
-            sek = "#ffe400";
-          } else if (color === 'orb-dark') {
-            sek = "#8a00ff";
-          } else {
-            sek = "#ff00fc";
+      if (!window.clicked) {
+        let matches = window.findMatches();
+      } else {
+        for (let row = 0; row < 5; row++) {
+          for (let col = 0; col < 6; col++) {
+            let color = window.orbArray[row][col].attrs.color;
+            let sek;
+            if (color === 'orb-fire') {
+              sek = "#ff0000";
+            } else if (color === 'orb-water') {
+              sek = "#00ffe0";
+            } else if (color === 'orb-wood') {
+              sek = "#aeff00";
+            } else if (color === 'orb-light') {
+              sek = "#ffe400";
+            } else if (color === 'orb-dark') {
+              sek = "#8a00ff";
+            } else {
+              sek = "#ff00fc";
+            }
+            console.log(`${row}${col}%c(■)`, `background: #222; color: ${sek}`);
           }
-          console.log(`${row}${col}%c(■)`, `background: #222; color: ${sek}`);
+          console.log("___");
         }
-        console.log("___");
       }
     }
   }
@@ -222,55 +228,56 @@ class BoardView {
 
   handleMouseMove (e) {
     // console.log(e.target.attrs.orbId);
+    if (!window.gameEnd) {
+        if (window.currentOrb !== undefined && (window.currentOrb.attrs.orbId !== e.target.attrs.orbId) && window.clicked) {
 
-    if (window.currentOrb !== undefined && (window.currentOrb.attrs.orbId !== e.target.attrs.orbId) && window.clicked) {
+        window.orbMove.currentTime = 0;
+        window.orbMove.play();
 
-      window.orbMove.currentTime = 0;
-      window.orbMove.play();
+        let targOrbX = e.target.attrs.x;
+        let targOrbY = e.target.attrs.y;
+        // This is the target orb that's being changed's value
+        // We're storing this in targOrb
+        e.target.x(window.newX);
+        e.target.y(window.newY);
 
-      let targOrbX = e.target.attrs.x;
-      let targOrbY = e.target.attrs.y;
-      // This is the target orb that's being changed's value
-      // We're storing this in targOrb
-      e.target.x(window.newX);
-      e.target.y(window.newY);
+        // Here we have the previously set current orb's position becoming
+        // the target orb's position
 
-      // Here we have the previously set current orb's position becoming
-      // the target orb's position
+        window.newX = targOrbX;
+        window.newY = targOrbY;
 
-      window.newX = targOrbX;
-      window.newY = targOrbY;
+        let x1 = window.currentOrb.attrs.pos[0];
+        let y1 = window.currentOrb.attrs.pos[1];
 
-      let x1 = window.currentOrb.attrs.pos[0];
-      let y1 = window.currentOrb.attrs.pos[1];
+        let x2 = e.target.attrs.pos[0];
+        let y2 = e.target.attrs.pos[1];
 
-      let x2 = e.target.attrs.pos[0];
-      let y2 = e.target.attrs.pos[1];
+        let orb1 = window.orbArray[x1][y1];
+        let orb2 = window.orbArray[x2][y2];
 
-      let orb1 = window.orbArray[x1][y1];
-      let orb2 = window.orbArray[x2][y2];
+        [orb1.attrs.x, orb2.attrs.x] = [orb2.attrs.x, orb1.attrs.x];
+        [orb1.attrs.y, orb2.attrs.y] = [orb2.attrs.y, orb1.attrs.y];
 
-      [orb1.attrs.x, orb2.attrs.x] = [orb2.attrs.x, orb1.attrs.x];
-      [orb1.attrs.y, orb2.attrs.y] = [orb2.attrs.y, orb1.attrs.y];
+        [window.orbArray[x1][y1], window.orbArray[x2][y2]] =
+        [window.orbArray[x2][y2], window.orbArray[x1][y1]];
 
-      [window.orbArray[x1][y1], window.orbArray[x2][y2]] =
-      [window.orbArray[x2][y2], window.orbArray[x1][y1]];
+        window.currentOrb.attrs.pos[0] = x2;
+        window.currentOrb.attrs.pos[1] = y2;
 
-      window.currentOrb.attrs.pos[0] = x2;
-      window.currentOrb.attrs.pos[1] = y2;
+        e.target.attrs.pos[0] = x1;
+        e.target.attrs.pos[1] = y1;
 
-      e.target.attrs.pos[0] = x1;
-      e.target.attrs.pos[1] = y1;
+        window.currentOrb.x(window.newX);
+        window.currentOrb.y(window.newY);
 
-      window.currentOrb.x(window.newX);
-      window.currentOrb.y(window.newY);
+        e.target.parent.clear();
+        window.currentOrb.parent.clear();
 
-      e.target.parent.clear();
-      window.currentOrb.parent.clear();
+        e.target.parent.draw();
+        window.currentOrb.draw();
 
-      e.target.parent.draw();
-      window.currentOrb.draw();
-
+      }
     }
   }
 
