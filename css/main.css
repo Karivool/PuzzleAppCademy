@@ -57,10 +57,11 @@ h2 {
   font-size: 26px;
 }
 
-#game-sidebar{
+.game-sidebar{
   float: right;
   display: inline-flex;
   padding-top: 10px;
+  height: 524px;
 }
 
 #instructions{
@@ -121,79 +122,18 @@ li {
   float: left;
 }
 
-.orb-class {
-  height: 100px;
-  width: 100px;
-  border-radius: 50px;
+#reset {
+  padding-top: 20px;
 }
 
-.orb-fire {
-  height: 100px;
-  width: 100px;
-  background-color: firebrick;
-  border-radius: 50px;
-  box-shadow: 0px 0px 5px red;
-  margin: 1px;
-}
-
-.orb-water {
-  height: 100px;
-  width: 100px;
-  background-color: cornflowerblue;
-  border-radius: 50px;
-  box-shadow: 0px 0px 5px blue;
-  margin: 1px;
-}
-
-.orb-wood {
-  height: 100px;
-  width: 100px;
-  background-color: yellowgreen;
-  border-radius: 50px;
-  box-shadow: 0px 0px 5px green;
-  margin: 1px;
-}
-
-.orb-light {
-  height: 100px;
-  width: 100px;
-  background-color: gold;
-  border-radius: 50px;
-  box-shadow: 0px 0px 5px gold;
-  margin: 1px;
-}
-
-.orb-dark {
-  height: 100px;
-  width: 100px;
-  background-color: blueviolet;
-  border-radius: 50px;
-  box-shadow: 0px 0px 5px purple;
-  margin: 1px;
-}
-
-.orb-heart {
-  height: 100px;
-  width: 100px;
-  margin: 1px;
-}
-
-.orb-poison {
-  height: 100px;
-  width: 100px;
-  margin: 1px;
-}
-
-.orb-jammer {
-  height: 100px;
-  width: 100px;
-  margin: 1px;
-}
-
-.orb-mortal {
-  height: 100px;
-  width: 100px;
-  margin: 1px;
+#reset-butt{
+  font-family: 'Roboto Slab', sans-serif;
+  color: whitesmoke;
+  font-size: 18px;
+  background-color: rebeccapurple;
+  padding: 5px;
+  border: 3px solid white;
+  border-radius: 10px;
 }
 
 .group:after {
