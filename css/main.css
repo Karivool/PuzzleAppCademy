@@ -25,6 +25,27 @@ h1 {
   text-align: center;
 }
 
+h2 {
+  padding-top: 10px;
+  font-family: 'Passion One', cursive;
+  font-size: 28px;
+}
+
+#rule {
+  font-family: 'Roboto Slab', sans-serif;
+  font-size: 20px;
+}
+
+#game-sidebar{
+  float: right;
+  display: inline-flex;
+  padding-top: 10px;
+}
+
+#instructions{
+  padding-bottom: 30px;
+}
+
 #title {
   display: flex;
   background: -webkit-linear-gradient(#832fd8, #1c176d);
@@ -44,6 +65,8 @@ h1 {
 }
 
 #game-board {
+  float: left;
+  margin-right: 20px;
   height: 504px;
   width: 604px;
   background: -webkit-linear-gradient(#bf5895, #1c176d);
