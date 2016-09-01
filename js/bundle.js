@@ -99,7 +99,9 @@
 	    window.gameEnd = false;
 	    window.gameStarted = false;
 	    window.score = this.score;
+	    window.updateScore = this.updateScore;
 	
+	    this.updateScore();
 	    this.playMusic();
 	  }
 	
@@ -472,6 +474,7 @@
 	
 	  dropOrbs (matches) {
 	    console.log(matches);
+	    let baseScore = matches.length;
 	    for (let i = 0; i < matches.length; i++) {
 	      let pos = matches[i].attrs.pos;
 	      let attrs = matches[i].attrs;
@@ -507,6 +510,7 @@
 	    //window.orbArray will let us iterate through them all
 	      // but orbArray's src should be changed too
 	
+	    window.updateScore(baseScore);
 	    return [];
 	  }
 	
@@ -538,6 +542,36 @@
 	
 	  sleep (time) {
 	    return new Promise((resolve) => setTimeout(resolve, time));
+	  }
+	
+	  updateScore(baseScore) {
+	    let score = document.getElementById('score');
+	    let scoreSpan = score.querySelector('.score');
+	
+	    if (baseScore !== undefined) {
+	      if (baseScore > 0 && baseScore <= 3) {
+	        window.score += 3;
+	      } else if (baseScore === 4) {
+	        window.score += 5;
+	      } else if (baseScore === 5) {
+	        window.score += 9;
+	      } else if (baseScore === 6) {
+	        window.score += 15;
+	      } else if (baseScore > 6 && baseScore <= 10) {
+	        window.score += (baseScore + 3) * 2;
+	      } else if (baseScore > 10 && baseScore <= 16) {
+	        window.score += (baseScore + 5) * 4;
+	      } else if (baseScore > 16 && baseScore <= 20) {
+	        window.score += (baseScore + 7) * 6;
+	      } else if (baseScore > 20 && baseScore <= 24) {
+	        window.score += (baseScore + 10) * 8;
+	      } else if (baseScore > 24 && baseScore <= 29) {
+	        window.score += (baseScore + 14) * 10;
+	      } else {
+	        window.score += (baseScore + 19) * 12;
+	      }
+	    }
+	    scoreSpan.innerHTML = (window.score);
 	  }
 	}
 	
