@@ -100,9 +100,11 @@
 	    window.gameStarted = false;
 	    window.score = this.score;
 	    window.updateScore = this.updateScore;
+	    window.mute = false;
+	    window.song = this.playMusic;
 	
 	    this.updateScore();
-	    this.playMusic();
+	    window.song();
 	  }
 	
 	  setupBoard () {
@@ -116,7 +118,7 @@
 	    const songs = ['./mp3/999.mp3', './mp3/crypt43.mp3', './mp3/cryptconga.mp3', './mp3/descent.mp3', './mp3/devils.mp3', './mp3/distrust.mp3', './mp3/evilem.mp3', './mp3/evilev.mp3', './mp3/hallow.mp3', './mp3/hexagon.mp3', './mp3/shinra.mp3', './mp3/unepiccast.mp3'];
 	
 	    let songNumber = Math.round(Math.random() * songs.length - 1);
-	    let song = new Audio(songs[songNumber]);
+	    song = new Audio(songs[songNumber]);
 	    song.volume = 0.5;
 	
 	    song.addEventListener('ended', function() {
@@ -124,6 +126,7 @@
 	      this.play();
 	      }, false);
 	    song.play();
+	    return song;
 	  }
 	
 	  addRow (colIdx) {
@@ -300,9 +303,10 @@
 	    // console.log(e.target.attrs.orbId);
 	    if (!window.gameEnd) {
 	        if (window.currentOrb !== undefined && (window.currentOrb.attrs.orbId !== e.target.attrs.orbId) && window.clicked) {
-	
-	        window.orbMove.currentTime = 0;
-	        window.orbMove.play();
+	        if (window.mute === false) {
+	          window.orbMove.currentTime = 0;
+	          window.orbMove.play();
+	        }
 	
 	        let targOrbX = e.target.attrs.x;
 	        let targOrbY = e.target.attrs.y;
@@ -536,9 +540,11 @@
 	      let soundNumber = Math.round(Math.random() * sounds.length - 1);
 	      let sound = new Audio(sounds[soundNumber]);
 	
-	      sound.volume = 0.25;
-	      sound.currentTime = 0;
-	      sound.play();
+	      if (window.mute === false) {
+	        sound.volume = 0.25;
+	        sound.currentTime = 0;
+	        sound.play();
+	      }
 	    });
 	  }
 	
@@ -562,15 +568,15 @@
 	      } else if (baseScore > 6 && baseScore <= 10) {
 	        window.score += (baseScore + 3) * 2;
 	      } else if (baseScore > 10 && baseScore <= 16) {
-	        window.score += (baseScore + 6) * 5;
+	        window.score += (baseScore + 5) * 4;
 	      } else if (baseScore > 16 && baseScore <= 20) {
-	        window.score += (baseScore + 9) * 7;
+	        window.score += (baseScore + 7) * 6;
 	      } else if (baseScore > 20 && baseScore <= 24) {
-	        window.score += (baseScore + 12) * 10;
+	        window.score += (baseScore + 10) * 8;
 	      } else if (baseScore > 24 && baseScore <= 29) {
-	        window.score += (baseScore + 15) * 13;
+	        window.score += (baseScore + 14) * 10;
 	      } else {
-	        window.score += (baseScore + 20) * 17;
+	        window.score += (baseScore + 19) * 12;
 	      }
 	    }
 	    scoreSpan.innerHTML = (window.score);
