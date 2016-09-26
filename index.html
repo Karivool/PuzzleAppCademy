@@ -43,7 +43,9 @@
           <div id="reset">
             <a id="reset-butt" href="./index.html">Reset</a>
             <!-- <button type="button" id="reset" onclick="resetGame()">Reset</button> -->
+            <button type="button" id="reset-butt" onclick="muteSound()">Mute</button>
           </div>
+        </div>
         </div>
       </div>
     </div>
@@ -92,6 +94,15 @@
 
         window.gameStarted = false;
         window.gameEnd = false;
+      }
+
+      function muteSound () {
+        window.mute = !window.mute;
+        if (window.mute === true) {
+          window.song.volume = 0;
+        } else {
+          window.song.volume = 0.5;
+        }
       };
     </script>
   </body>
