@@ -288,9 +288,9 @@
 	            } else {
 	              sek = "#ff00fc";
 	            }
-	            console.log(`${row}${col}%c(■)`, `background: #222; color: ${sek}`);
+	            // console.log(`${row}${col}%c(■)`, `background: #222; color: ${sek}`);
 	          }
-	          console.log("___");
+	          // console.log("___");
 	        }
 	      }
 	    }
@@ -389,9 +389,9 @@
 	        } else {
 	          sek = "#ff00fc";
 	        }
-	        console.log(`${row}${col}%c(■)`, `background: #222; color: ${sek}`);
+	        // console.log(`${row}${col}%c(■)`, `background: #222; color: ${sek}`);
 	      }
-	      console.log("___");
+	      // console.log("___");
 	    }
 	
 	    for (let row = 0; row < 5; row++) {
@@ -479,7 +479,7 @@
 	  }
 	
 	  dropOrbs (matches) {
-	    console.log(matches);
+	    // console.log(matches);
 	    let baseScore = matches.length;
 	    for (let i = 0; i < matches.length; i++) {
 	      let pos = matches[i].attrs.pos;
