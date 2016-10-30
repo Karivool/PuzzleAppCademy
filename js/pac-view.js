@@ -15,7 +15,7 @@ class BoardView {
     // this.renderImages();
 
     window.stage = this.stage;
-    window.orbMove = new Audio('orb_move.mp3');
+    window.orbMove = new Audio('./assets/sfx/orb_move.mp3');
     window.movedOrbs = [];
     window.clicked = false;
 
@@ -49,7 +49,7 @@ class BoardView {
   }
 
   playMusic() {
-    const songs = ['./mp3/999.mp3', './mp3/crypt43.mp3', './mp3/cryptconga.mp3', './mp3/descent.mp3', './mp3/devils.mp3', './mp3/distrust.mp3', './mp3/evilem.mp3', './mp3/evilev.mp3', './mp3/hallow.mp3', './mp3/hexagon.mp3', './mp3/shinra.mp3', './mp3/unepiccast.mp3'];
+    const songs = ['./assets/mp3/999.mp3', './assets/mp3/crypt43.mp3', './assets/mp3/cryptconga.mp3', './assets/mp3/descent.mp3', './assets/mp3/devils.mp3', './assets/mp3/distrust.mp3', './assets/mp3/evilem.mp3', './assets/mp3/evilev.mp3', './assets/mp3/hallow.mp3', './assets/mp3/hexagon.mp3', './assets/mp3/shinra.mp3', './assets/mp3/unepiccast.mp3'];
 
     let songNumber = Math.round(Math.random() * songs.length - 1);
     song = new Audio(songs[songNumber]);
@@ -469,7 +469,7 @@ class BoardView {
       layer.draw();
       window.orbs[reImage.attrs.orbId] = reImage;
 
-      const sounds = ['./superlaser2.mp3', './superlaser3.mp3', './superlaser4.mp3', './superlaser5.mp3', './superlaser7.mp3', './superlaser8.mp3', './superlaser9.mp3', './superlaser11.mp3', './superlaser12.mp3'];
+      const sounds = ['./assets/sfx/superlaser2.mp3', './assets/sfx/superlaser3.mp3', './assets/sfx/superlaser4.mp3', './assets/sfx/superlaser5.mp3', './assets/sfx/superlaser7.mp3', './assets/sfx/superlaser8.mp3', './assets/sfx/superlaser9.mp3', './assets/sfx/superlaser11.mp3', './assets/sfx/superlaser12.mp3'];
 
       let soundNumber = Math.round(Math.random() * sounds.length - 1);
       let sound = new Audio(sounds[soundNumber]);
