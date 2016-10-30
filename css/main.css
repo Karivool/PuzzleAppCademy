@@ -133,6 +133,7 @@ li {
   padding: 5px;
   border: 3px solid white;
   border-radius: 10px;
+  cursor: pointer;
 }
 
 @-webkit-keyframes hvr-port-butt {
