@@ -219,6 +219,10 @@ li {
   color: black;
 }
 
+.personal-buts {
+  bottom: 1%;
+}
+
 .group:after {
   content: "";
   clear: both;
