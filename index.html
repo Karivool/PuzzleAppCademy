@@ -15,6 +15,8 @@
     <script src="./kinetic-v5.1.0.js"> </script>
     <script src="./js/bundle.js"></script>
     <div id="game group">
+      <p id="game-over">GAME END</p>
+      <a id="reset-butt-game-over" href="./index.html">Play again</a>
       <div id="game-board" onclick="beginGame()">
         <div id="game-play">
         </div>
@@ -83,6 +85,8 @@
             secondsSpan.innerHTML = (countdown);
             if (countdown <= 0) {
               window.gameEnd = true;
+              document.getElementById("game-over").style.visibility = "visible"
+              document.getElementById("reset-butt-game-over").style.visibility = "visible"
             }
           }
         }
