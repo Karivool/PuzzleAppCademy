@@ -1,6 +1,7 @@
 # PuzzleAppCademy
 ### A simple clone of the puzzle board for Puzzle and Dragons.
 <a href="http://evelynlee34.us/PuzzleAppCademy/">Play here</a>
+<p>
 <img src="./pic02.jpg"></a>
 
 PuzzleAppCademy is a simplified board clone of the highly popular game, Puzzle and Dragons. Gameplay is simple. Within the time-limit, match orbs of the same color so that there are 3 or more of the same horizontally and/or vertically. To swap orbs, click on one with the mouse, and move it around the board wherever you want. Once you're done swapping as many as you want, click the mouse again, and any matches made will activate.
