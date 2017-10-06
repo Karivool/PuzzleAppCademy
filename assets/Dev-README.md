@@ -1,4 +1,4 @@
-# PuzzleAppAcademy
+# PuzzleAcademy
 A simple clone of the puzzle board for Puzzle and Dragons
 
 ### MVP
